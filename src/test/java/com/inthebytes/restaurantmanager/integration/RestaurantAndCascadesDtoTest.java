@@ -131,8 +131,6 @@ public class RestaurantAndCascadesDtoTest {
 		test.setMenus(new ArrayList<MenuModel>());
 		
 		ManagerRoleModel role = new ManagerRoleModel();
-//		role.setName("restaurant");
-//		roleRepo.save(role);
 		
 		ManagerModel manager = new ManagerModel();
 		manager.setFirstName("Restaurant");
@@ -143,15 +141,13 @@ public class RestaurantAndCascadesDtoTest {
 		manager.setPhone("111-111-1111");
 		manager.setUsername("myManagaer");
 		manager.setIsActive(false);
-		
-		System.out.println("\n\n\n\n\n\nTEST PRINT");
-		System.out.println(manager.getRole().getName() + manager.getRole().getRoleId());
 		test.setManager(manager);
 		
 		restaurantRepo.save(test);
 		assertThat(restaurantRepo.findByName("Lexi's Burgers")).isNotNull();
-		restaurantRepo.delete(test);
+		assertThat(managerRepo.findAll().size()).isNotZero();
 		assertThat(hoursRepo.findAll().size()).isNotZero();
+		restaurantRepo.delete(test);
 		hoursRepo.delete(hoursRepo.findAll().get(0));
 		assertThat(restaurantRepo.findAll().size()).isZero();
 		assertThat(hoursRepo.findAll().size()).isZero();
