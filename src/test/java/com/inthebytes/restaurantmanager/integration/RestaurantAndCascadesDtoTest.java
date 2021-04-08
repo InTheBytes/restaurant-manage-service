@@ -131,8 +131,8 @@ public class RestaurantAndCascadesDtoTest {
 		test.setMenus(new ArrayList<MenuModel>());
 		
 		ManagerRoleModel role = new ManagerRoleModel();
-		role.setName("restaurant");
-		roleRepo.save(role);
+//		role.setName("restaurant");
+//		roleRepo.save(role);
 		
 		ManagerModel manager = new ManagerModel();
 		manager.setFirstName("Restaurant");
@@ -142,6 +142,7 @@ public class RestaurantAndCascadesDtoTest {
 		manager.setPassword("HELLO!!!");
 		manager.setPhone("111-111-1111");
 		manager.setUsername("myManagaer");
+		manager.setIsActive(false);
 		
 		System.out.println("\n\n\n\n\n\nTEST PRINT");
 		System.out.println(manager.getRole().getName() + manager.getRole().getRoleId());

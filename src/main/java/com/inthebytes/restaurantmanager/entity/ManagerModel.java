@@ -45,6 +45,9 @@ public class ManagerModel implements Serializable {
 	
 	@Column(name = "last_name")
 	private String lastName;
+	
+	@Column(name = "active")
+	private Boolean isActive;
 
 	public Long getManagerId() {
 		return managerId;
@@ -108,6 +111,14 @@ public class ManagerModel implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	public static long getSerialversionuid() {
