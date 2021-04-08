@@ -42,7 +42,7 @@ public class RestaurantCreationController {
 		if (result != null) {
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("Restaurant-ID", Long.toString(result.getRestaurantId()));
-			return ResponseEntity.ok().headers(responseHeaders).body(result);
+			return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).body(result);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 		}

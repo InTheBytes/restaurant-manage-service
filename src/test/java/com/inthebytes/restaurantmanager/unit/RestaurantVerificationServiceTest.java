@@ -1,5 +1,5 @@
 package com.inthebytes.restaurantmanager.unit;
 
-public class RestaurantVerificationService {
+public class RestaurantVerificationServiceTest {
 
 }
