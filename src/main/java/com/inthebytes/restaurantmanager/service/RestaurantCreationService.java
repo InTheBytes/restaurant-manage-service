@@ -48,6 +48,8 @@ public class RestaurantCreationService {
 	
 	public RestaurantModel getRestaurantInProgress(Long id) {
 		RestaurantModel restaurant = restaurantRepo.findByRestaurantId(id);
+		if (restaurant == null)
+			return null;
 		if (restaurant.getManager().getIsActive())
 			return null;
 		return restaurant;
@@ -170,10 +172,13 @@ public class RestaurantCreationService {
 
 	private ManagerModel generateManager(RestaurantModel restaurant) {
 		ManagerModel manager = new ManagerModel();
-		
-		String[] nameParts = restaurant.getName().split(" ");
+		String[] nameParts;
+		if (restaurant.getName() == null)
+			nameParts = new String[] {"restaurant"};
+		else
+			nameParts = restaurant.getName().split(" ");
 		StringBuffer name = new StringBuffer();
-		for (int i = 0; i < nameParts.length || i < 3; i++)
+		for (int i = 0; i < nameParts.length && i < 3; i++)
 			name.append(nameParts[i] + "-");
 		manager.setUsername(name.toString() + "manager");
 		name.deleteCharAt(name.length()-1);

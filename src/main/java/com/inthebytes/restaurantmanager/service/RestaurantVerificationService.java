@@ -14,8 +14,6 @@ import com.inthebytes.restaurantmanager.entity.RestaurantModel;
 @Service
 public class RestaurantVerificationService {
 
-	@Autowired
-	private HoursDTO hoursRepo;
 
 	public Boolean checkForFinished(RestaurantModel candidate) {
 		if (!checkBasics(candidate))
