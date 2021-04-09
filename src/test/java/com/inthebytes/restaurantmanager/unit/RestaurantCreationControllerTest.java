@@ -40,13 +40,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inthebytes.restaurantmanager.control.RestaurantCreationController;
-import com.inthebytes.restaurantmanager.entity.GenreModel;
-import com.inthebytes.restaurantmanager.entity.HoursModel;
-import com.inthebytes.restaurantmanager.entity.LocationModel;
-import com.inthebytes.restaurantmanager.entity.ManagerModel;
-import com.inthebytes.restaurantmanager.entity.ManagerRoleModel;
-import com.inthebytes.restaurantmanager.entity.MenuModel;
-import com.inthebytes.restaurantmanager.entity.RestaurantModel;
+import com.inthebytes.restaurantmanager.entity.Genre;
+import com.inthebytes.restaurantmanager.entity.Manager;
+import com.inthebytes.restaurantmanager.entity.ManagerRole;
+import com.inthebytes.restaurantmanager.entity.Restaurant;
 import com.inthebytes.restaurantmanager.service.RestaurantCreationService;
 
 @WebMvcTest(RestaurantCreationController.class)
@@ -56,18 +53,15 @@ public class RestaurantCreationControllerTest {
 	@Autowired
 	private MockMvc mock;
 
-	@Autowired
-	private RestaurantCreationController control;
-
 	@MockBean
 	private RestaurantCreationService service;
 
 	@Test
 	public void addRestaurantTest() throws JsonProcessingException, Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.submitRestaurant(restaurant)).thenReturn(restaurant);
 
-		mock.perform(post("/creator/restaurant/confirmation")
+		mock.perform(post("/apis/restaurant/confirmation")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isOk())
@@ -76,11 +70,11 @@ public class RestaurantCreationControllerTest {
 
 	@Test
 	public void addRestaurantInvalidTest() throws JsonProcessingException, Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.submitRestaurant(restaurant)).thenReturn(null);
 		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(true);
 
-		mock.perform(post("/creator/restaurant/confirmation")
+		mock.perform(post("/apis/restaurant/confirmation")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isNotAcceptable());
@@ -88,11 +82,11 @@ public class RestaurantCreationControllerTest {
 
 	@Test
 	public void addRestaurantNonexistentTest() throws JsonProcessingException, Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.submitRestaurant(restaurant)).thenReturn(null);
 		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(false);
 
-		mock.perform(post("/creator/restaurant/confirmation")
+		mock.perform(post("/apis/restaurant/confirmation")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -100,10 +94,10 @@ public class RestaurantCreationControllerTest {
 
 	@Test
 	public void startRestaurantCreationTest() throws JsonProcessingException, Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.startRestaurant(restaurant)).thenReturn(restaurant);
 
-		mock.perform(post("/creator/restaurant/starter")
+		mock.perform(post("/apis/restaurant/starter")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isCreated())
@@ -112,112 +106,109 @@ public class RestaurantCreationControllerTest {
 
 	@Test
 	public void startRestaurantCreationInvalidTest() throws JsonProcessingException, Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.startRestaurant(restaurant)).thenReturn(null);
 
-		mock.perform(post("/creator/restaurant/starter")
+		mock.perform(post("/apis/restaurant/starter")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isNotAcceptable());
 	}
 
-	@Test
-	public void updateRestaurantCreationTest() throws JsonProcessingException, Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
-		when(service.updateRestaurant(restaurant)).thenReturn(restaurant);
+//	@Test
+//	public void updateRestaurantCreationTest() throws JsonProcessingException, Exception {
+//		Restaurant restaurant = makeRestaurantModel();
+//		when(service.updateRestaurant(restaurant)).thenReturn(restaurant);
+//
+//		mock.perform(put("/apis/restaurant/{restaurantId}", restaurant.getRestaurantId())
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(new ObjectMapper().writeValueAsString(restaurant)))
+//		.andExpect(MockMvcResultMatchers.status().isOk())
+//		.andExpect(MockMvcResultMatchers.header().string("Restaurant-ID", Matchers.containsString("1")));
+//	}
 
-		mock.perform(put("/creator/restaurant/{restaurantId}", restaurant.getRestaurantId())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(restaurant)))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.header().string("Restaurant-ID", Matchers.containsString("1")));
-	}
-
-	@Test
-	public void updateRestaurantCreationInvalidTest() throws JsonProcessingException, Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
-		when(service.submitRestaurant(restaurant)).thenReturn(null);
-		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(true);
-
-		mock.perform(put("/creator/restaurant/{restaurantId}", restaurant.getRestaurantId())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(restaurant)))
-		.andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
-	}
-
-	@Test
-	public void updateRestaurantCreationNonexistentTest() throws JsonProcessingException, Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
-		when(service.submitRestaurant(restaurant)).thenReturn(null);
-		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(false);
-
-		mock.perform(put("/creator/restaurant/{restaurantId}", restaurant.getRestaurantId())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(restaurant)))
-		.andExpect(MockMvcResultMatchers.status().isNotFound());
-	}
+//	@Test
+//	public void updateRestaurantCreationInvalidTest() throws JsonProcessingException, Exception {
+//		Restaurant restaurant = makeRestaurantModel();
+//		when(service.submitRestaurant(restaurant)).thenReturn(null);
+//		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(true);
+//
+//		mock.perform(put("/apis/restaurant/{restaurantId}", restaurant.getRestaurantId())
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(new ObjectMapper().writeValueAsString(restaurant)))
+//		.andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+//	}
+//
+//	@Test
+//	public void updateRestaurantCreationNonexistentTest() throws JsonProcessingException, Exception {
+//		Restaurant restaurant = makeRestaurantModel();
+//		when(service.submitRestaurant(restaurant)).thenReturn(null);
+//		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(false);
+//
+//		mock.perform(put("/apis/restaurant/{restaurantId}", restaurant.getRestaurantId())
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(new ObjectMapper().writeValueAsString(restaurant)))
+//		.andExpect(MockMvcResultMatchers.status().isNotFound());
+//	}
 
 	@Test
 	public void viewRestaurantCreationTest() throws Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.getRestaurantInProgress(1L)).thenReturn(restaurant);
 
-		mock.perform(get("/creator/restaurant/preview/{restaurantId}", 1L)
+		mock.perform(get("/apis/restaurant/preview/{restaurantId}", 1L)
 				.accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk()).andReturn();
 	}
 
 	@Test
 	public void viewRestaurantCreationNonexistentTest() throws JsonProcessingException, Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.getRestaurantInProgress(restaurant.getRestaurantId())).thenReturn(null);
 
-		mock.perform(get("/creator/restaurant/preview/{restaurantId}", 
+		mock.perform(get("/apis/restaurant/preview/{restaurantId}", 
 				restaurant.getRestaurantId())).andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 
 	@Test
 	public void cancelRestaurantCreationTest() throws Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.trashRestaurantProgress(restaurant.getRestaurantId())).thenReturn(true);
 
-		mock.perform(delete("/creator/restaurant/{restaurantId}", restaurant.getRestaurantId()))
+		mock.perform(delete("/apis/restaurant/{restaurantId}", restaurant.getRestaurantId()))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.header().string("Deleted-Restaurant-ID", Matchers.containsString("1")));
 	}
 
 	@Test
 	public void cancelRestaurantCreationInvalidTest() throws Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.trashRestaurantProgress(restaurant.getRestaurantId())).thenReturn(false);
 		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(true);
 
-		mock.perform(delete("/creator/restaurant/{restaurantId}", restaurant.getRestaurantId()))
+		mock.perform(delete("/apis/restaurant/{restaurantId}", restaurant.getRestaurantId()))
 		.andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
 	}
 
 	@Test
 	public void cancelRestaurantCreationNonexistentTest() throws Exception {
-		RestaurantModel restaurant = makeRestaurantModel();
+		Restaurant restaurant = makeRestaurantModel();
 		when(service.trashRestaurantProgress(restaurant.getRestaurantId())).thenReturn(false);
 		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(false);
 
-		mock.perform(delete("/creator/restaurant/{restaurantId}", restaurant.getRestaurantId()))
+		mock.perform(delete("/apis/restaurant/{restaurantId}", restaurant.getRestaurantId()))
 		.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 
-	private RestaurantModel makeRestaurantModel() {
-		RestaurantModel test = new RestaurantModel();
+	private Restaurant makeRestaurantModel() {
+		Restaurant test = new Restaurant();
 		test.setRestaurantId(1L);
 		test.setName("Lexi's Burgers");
-
-		test.setHours(new HoursModel());
-		test.setMenus(new ArrayList<MenuModel>());
-
-		ManagerRoleModel role = new ManagerRoleModel();
+		
+		ManagerRole role = new ManagerRole();
 		role.setName("restaurant");
 
-		ManagerModel manager = new ManagerModel();
+		Manager manager = new Manager();
 		manager.setFirstName("Restaurant");
 		manager.setRole(role);
 		manager.setLastName("Manager");
@@ -228,19 +219,8 @@ public class RestaurantCreationControllerTest {
 		manager.setIsActive(false);
 		test.setManager(manager);
 
-		List<LocationModel> locations = new ArrayList<LocationModel>();
-		LocationModel location = new LocationModel();
-		location.setStreet("Main St.");
-		location.setStreetAddition("");
-		location.setUnit("123");
-		location.setCity("Sacramento");
-		location.setState("California");
-		location.setZip(95838);
-		locations.add(location);
-		test.setLocations(locations);
-
-		List<GenreModel> genres = new ArrayList<GenreModel>();
-		GenreModel genre = new GenreModel();
+		List<Genre> genres = new ArrayList<Genre>();
+		Genre genre = new Genre();
 		genre.setTitle("Fair Food");
 		genres.add(genre);
 		test.setGenres(genres);

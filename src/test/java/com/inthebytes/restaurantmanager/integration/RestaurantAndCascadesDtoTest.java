@@ -11,27 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.inthebytes.restaurantmanager.dto.GenreDTO;
-import com.inthebytes.restaurantmanager.dto.HoursDTO;
-import com.inthebytes.restaurantmanager.dto.LocationDTO;
 import com.inthebytes.restaurantmanager.dto.ManagerDTO;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.dto.RoleDTO;
-import com.inthebytes.restaurantmanager.entity.GenreModel;
-import com.inthebytes.restaurantmanager.entity.HoursModel;
-import com.inthebytes.restaurantmanager.entity.LocationModel;
-import com.inthebytes.restaurantmanager.entity.ManagerModel;
-import com.inthebytes.restaurantmanager.entity.ManagerRoleModel;
-import com.inthebytes.restaurantmanager.entity.MenuModel;
-import com.inthebytes.restaurantmanager.entity.RestaurantModel;
+import com.inthebytes.restaurantmanager.entity.Genre;
+import com.inthebytes.restaurantmanager.entity.Manager;
+import com.inthebytes.restaurantmanager.entity.ManagerRole;
+import com.inthebytes.restaurantmanager.entity.Restaurant;
 
 @DataJpaTest
 public class RestaurantAndCascadesDtoTest {
-
-	@Autowired
-	HoursDTO hoursRepo;
-	
-	@Autowired
-	LocationDTO locationRepo;
 	
 	@Autowired
 	RestaurantDTO restaurantRepo;
@@ -45,52 +34,9 @@ public class RestaurantAndCascadesDtoTest {
 	@Autowired
 	RoleDTO roleRepo;
 	
-	@Test
-	public void testLocationRepo() {
-		LocationModel test = new LocationModel();
-		test.setStreet("Main St.");
-		test.setStreetAddition("");
-		test.setUnit("123");
-		test.setCity("Sacramento");
-		test.setState("California");
-		test.setZip(95838);
-		
-		test = locationRepo.save(test);
-		assertThat(locationRepo.findAll().size()).isNotZero();
-		assertThat(locationRepo.findByLocationId(test.getLocationId()).getState()).isEqualTo("California");
-		
-		locationRepo.delete(test);
-		assertThat(locationRepo.findAll().size()).isZero();
-	}
-	
-	@Test
-	public void testHoursRepo() {
-		HoursModel test = new HoursModel();
-		LocalTime open = LocalTime.parse("09:00");
-		LocalTime close = LocalTime.parse("21:00");
-		test.setMondayOpen(open);
-		test.setTuesdayOpen(open);
-		test.setWednesdayOpen(open);
-		test.setThursdayOpen(open);
-		test.setFridayOpen(open);
-		test.setSaturdayOpen(open);
-		test.setSundayOpen(open);
-		test.setMondayClose(close);
-		test.setTuesdayClose(close);
-		test.setWednesdayClose(close);
-		test.setThursdayClose(close);
-		test.setFridayClose(close);
-		test.setSaturdayClose(close);
-		test.setSundayClose(close);
-		
-		hoursRepo.save(test);
-		assertThat(hoursRepo.findAll().size()).isNotZero();
-		hoursRepo.delete(test);
-		assertThat(hoursRepo.findAll().size()).isZero();
-	}
 	
 	public void testGenreRepo() {
-		GenreModel test = new GenreModel();
+		Genre test = new Genre();
 		test.setTitle("Bistro");
 		genreRepo.save(test);
 		assertThat(genreRepo.findByGenreTitle("Bistro")).isNotNull();
@@ -99,11 +45,11 @@ public class RestaurantAndCascadesDtoTest {
 	}
 	
 	public void testManagerRepo() {
-		ManagerRoleModel role = new ManagerRoleModel();
+		ManagerRole role = new ManagerRole();
 		role.setName("restaurant");
 		roleRepo.save(role);
 		
-		ManagerModel test = new ManagerModel();
+		Manager test = new Manager();
 		test.setFirstName("Restaurant");
 		test.setRole(roleRepo.findRoleByName("restaurant"));
 		test.setLastName("Manager");
@@ -121,18 +67,10 @@ public class RestaurantAndCascadesDtoTest {
 	
 	@Test
 	public void testRestuarantDto() {
-		RestaurantModel test = new RestaurantModel();
+		Restaurant test = new Restaurant();
 		test.setName("Lexi's Burgers");
-		hoursRepo.save(new HoursModel());
 		
-		test.setHours(hoursRepo.findAll().get(0));
-		test.setGenres(new ArrayList<GenreModel>());
-		test.setLocations(new ArrayList<LocationModel>());
-		test.setMenus(new ArrayList<MenuModel>());
-		
-		ManagerRoleModel role = new ManagerRoleModel();
-		
-		ManagerModel manager = new ManagerModel();
+		Manager manager = new Manager();
 		manager.setFirstName("Restaurant");
 		manager.setRole(roleRepo.findRoleByName("restaurant"));
 		manager.setLastName("Manager");
@@ -143,14 +81,12 @@ public class RestaurantAndCascadesDtoTest {
 		manager.setIsActive(false);
 		test.setManager(manager);
 		
-		restaurantRepo.save(test);
+		test = restaurantRepo.save(test);
 		assertThat(restaurantRepo.findByName("Lexi's Burgers")).isNotNull();
-		assertThat(managerRepo.findAll().size()).isNotZero();
-		assertThat(hoursRepo.findAll().size()).isNotZero();
+		assertThat(managerRepo.findById(test.getManager().getManagerId())).isNotNull();
 		restaurantRepo.delete(test);
-		hoursRepo.delete(hoursRepo.findAll().get(0));
-		assertThat(restaurantRepo.findAll().size()).isZero();
-		assertThat(hoursRepo.findAll().size()).isZero();
-		assertThat(managerRepo.findAll().size()).isZero();
+		managerRepo.delete(test.getManager());
+		assertThat(restaurantRepo.findByName("Lexi's Burgers")).isNull();
+		assertThat(managerRepo.findById(test.getManager().getManagerId())).isEmpty();
 	}
 }

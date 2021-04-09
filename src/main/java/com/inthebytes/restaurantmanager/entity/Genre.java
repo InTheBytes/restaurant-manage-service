@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "genre")
-public class GenreModel implements Serializable {
+public class Genre implements Serializable {
 
 	private static final long serialVersionUID = 7545398510957831758L;
 	
@@ -58,7 +58,7 @@ public class GenreModel implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		GenreModel other = (GenreModel) obj;
+		Genre other = (Genre) obj;
 		if (genreId == null) {
 			if (other.genreId != null)
 				return false;

@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -17,36 +19,28 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "restaurant")
-public class RestaurantModel implements Serializable {
+public class Restaurant implements Serializable {
 
 	private static final long serialVersionUID = -8756584311354409044L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "restaurant_id")
 	private Long restaurantId;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "manager_id")
-	private ManagerModel manager;
+	private Manager manager;
 	
 	@Column(name = "name")
 	private String name;
 	
-	@ManyToOne()
-	@JoinColumn(name = "hours_id")
-	private HoursModel hours;
-	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "restaurant_id")
-	private List<LocationModel> locations;
-	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "restaurant_id")
-	private List<MenuModel> menus;
-	
-	@OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
-	@JoinColumn(name = "restaurant_id")
-	private List<GenreModel> genres;
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(
+			name = "restaurant_genre",
+			joinColumns = @JoinColumn(name = "restaurant_id"),
+			inverseJoinColumns = @JoinColumn(name = "genre_id"))
+	private List<Genre> genre;
 
 	public Long getRestaurantId() {
 		return restaurantId;
@@ -56,11 +50,11 @@ public class RestaurantModel implements Serializable {
 		this.restaurantId = restaurantId;
 	}
 
-	public ManagerModel getManager() {
+	public Manager getManager() {
 		return manager;
 	}
 
-	public void setManager(ManagerModel manager) {
+	public void setManager(Manager manager) {
 		this.manager = manager;
 	}
 
@@ -72,36 +66,12 @@ public class RestaurantModel implements Serializable {
 		this.name = name;
 	}
 
-	public HoursModel getHours() {
-		return hours;
+	public List<Genre> getGenres() {
+		return genre;
 	}
 
-	public void setHours(HoursModel hours) {
-		this.hours = hours;
-	}
-
-	public List<LocationModel> getLocations() {
-		return locations;
-	}
-
-	public void setLocations(List<LocationModel> locations) {
-		this.locations = locations;
-	}
-
-	public List<MenuModel> getMenus() {
-		return menus;
-	}
-
-	public void setMenus(List<MenuModel> menus) {
-		this.menus = menus;
-	}
-
-	public List<GenreModel> getGenres() {
-		return genres;
-	}
-
-	public void setGenres(List<GenreModel> genres) {
-		this.genres = genres;
+	public void setGenres(List<Genre> genres) {
+		this.genre = genres;
 	}
 
 	public static long getSerialversionuid() {
@@ -124,7 +94,7 @@ public class RestaurantModel implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RestaurantModel other = (RestaurantModel) obj;
+		Restaurant other = (Restaurant) obj;
 		if (restaurantId == null) {
 			if (other.restaurantId != null)
 				return false;
