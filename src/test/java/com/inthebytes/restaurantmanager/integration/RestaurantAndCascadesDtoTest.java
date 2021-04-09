@@ -84,9 +84,9 @@ public class RestaurantAndCascadesDtoTest {
 		test.setSundayClose(close);
 		
 		hoursRepo.save(test);
-		assertThat(hoursRepo.findAll().size()).isNotZero();
+		assertThat(hoursRepo.findByHoursId(test.getHoursId())).isNotNull();
 		hoursRepo.delete(test);
-		assertThat(hoursRepo.findAll().size()).isZero();
+		assertThat(hoursRepo.findByHoursId(test.getHoursId())).isNull();
 	}
 	
 	public void testGenreRepo() {

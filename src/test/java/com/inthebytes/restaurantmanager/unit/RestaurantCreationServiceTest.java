@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.inthebytes.restaurantmanager.dto.CustomizationDTO;
 import com.inthebytes.restaurantmanager.dto.FoodDTO;
+import com.inthebytes.restaurantmanager.dto.GenreDTO;
 import com.inthebytes.restaurantmanager.dto.HoursDTO;
 import com.inthebytes.restaurantmanager.dto.ManagerDTO;
 import com.inthebytes.restaurantmanager.dto.MenuDTO;
@@ -59,6 +60,8 @@ public class RestaurantCreationServiceTest {
 	RoleDTO roleRepo;
 	@MockBean
 	MenuDTO menuRepo;
+	@MockBean
+	GenreDTO genreRepo;
 	@MockBean
 	RestaurantDTO restaurantRepo;
 	

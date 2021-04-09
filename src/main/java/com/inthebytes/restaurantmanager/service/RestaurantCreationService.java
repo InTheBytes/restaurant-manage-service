@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.inthebytes.restaurantmanager.dto.CustomizationDTO;
 import com.inthebytes.restaurantmanager.dto.FoodDTO;
+import com.inthebytes.restaurantmanager.dto.GenreDTO;
 import com.inthebytes.restaurantmanager.dto.HoursDTO;
 import com.inthebytes.restaurantmanager.dto.ManagerDTO;
 import com.inthebytes.restaurantmanager.dto.MenuDTO;
@@ -18,6 +19,7 @@ import com.inthebytes.restaurantmanager.dto.RoleDTO;
 import com.inthebytes.restaurantmanager.entity.CustomizationModel;
 import com.inthebytes.restaurantmanager.entity.FoodCustomization;
 import com.inthebytes.restaurantmanager.entity.FoodModel;
+import com.inthebytes.restaurantmanager.entity.GenreModel;
 import com.inthebytes.restaurantmanager.entity.HoursModel;
 import com.inthebytes.restaurantmanager.entity.ManagerModel;
 import com.inthebytes.restaurantmanager.entity.MenuModel;
@@ -43,6 +45,8 @@ public class RestaurantCreationService {
 	private RoleDTO roleRepo;
 	@Autowired
 	private MenuDTO menuRepo;
+	@Autowired
+	private GenreDTO genreRepo;
 	@Autowired
 	private RestaurantDTO restaurantRepo;
 	
@@ -102,6 +106,8 @@ public class RestaurantCreationService {
 			return null;
 		if (startingRestaurant.getMenus() == null)
 			startingRestaurant.setMenus(new ArrayList<MenuModel>());
+		
+		startingRestaurant.setGenres(existingGenres(startingRestaurant));;
 		
 		HoursModel result = existingHours(startingRestaurant.getHours());
 		if (result != null)
@@ -189,6 +195,18 @@ public class RestaurantCreationService {
 		manager.setPhone("000-000-0000");
 		manager.setRole(roleRepo.findRoleByName("restaurant"));
 		return manager;
+	}
+	
+	private List<GenreModel> existingGenres(RestaurantModel restaurant) {
+		List<GenreModel> genres = new ArrayList<GenreModel>();
+		for (GenreModel genre : restaurant.getGenres()) {
+			GenreModel saved = genreRepo.findByGenreTitle(genre.getTitle());
+			if (saved != null)
+				genres.add(saved);
+			else
+				genres.add(genre);
+		}
+		return genres;
 	}
 	
 	private HoursModel existingHours(HoursModel hours) {

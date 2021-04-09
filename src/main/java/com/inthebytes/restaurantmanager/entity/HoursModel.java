@@ -18,6 +18,7 @@ public class HoursModel implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "hours_id")
 	public Long hoursId;
 
 	@Column(name = "monday_open", columnDefinition = "TIME")

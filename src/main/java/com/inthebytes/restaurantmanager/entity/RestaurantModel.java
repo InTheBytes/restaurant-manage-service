@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -37,15 +38,24 @@ public class RestaurantModel implements Serializable {
 	private HoursModel hours;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "restaurant_id")
+	@JoinTable(
+			name = "restaurant_location",
+			joinColumns = @JoinColumn(name = "restaurant_id"),
+			inverseJoinColumns = @JoinColumn(name = "location_id"))
 	private List<LocationModel> locations;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "restaurant_id")
+	@JoinTable(
+			name = "restaurant_menus",
+			joinColumns = @JoinColumn(name = "restaurant_id"),
+			inverseJoinColumns = @JoinColumn(name = "menu_id"))
 	private List<MenuModel> menus;
 	
 	@OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
-	@JoinColumn(name = "restaurant_id")
+	@JoinTable(
+			name = "restaurant_genre",
+			joinColumns = @JoinColumn(name = "restaurant_id"),
+			inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private List<GenreModel> genres;
 
 	public Long getRestaurantId() {
