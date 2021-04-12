@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -28,7 +29,11 @@ public class MenuModel implements Serializable {
 	private String title;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "menu_id")
+	@JoinTable(
+			name = "menu_food",
+			joinColumns = @JoinColumn(name="menu_id"),
+			inverseJoinColumns = @JoinColumn(name="food_id")
+			)
 	private List<FoodModel> menuItems;
 
 	public Long getMenuId() {
