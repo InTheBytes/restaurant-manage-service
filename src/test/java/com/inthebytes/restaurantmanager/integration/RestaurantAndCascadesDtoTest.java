@@ -2,19 +2,13 @@ package com.inthebytes.restaurantmanager.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.inthebytes.restaurantmanager.dto.GenreDTO;
 import com.inthebytes.restaurantmanager.dto.ManagerDTO;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.dto.RoleDTO;
-import com.inthebytes.restaurantmanager.entity.Genre;
 import com.inthebytes.restaurantmanager.entity.Manager;
 import com.inthebytes.restaurantmanager.entity.ManagerRole;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
@@ -29,21 +23,9 @@ public class RestaurantAndCascadesDtoTest {
 	ManagerDTO managerRepo;
 	
 	@Autowired
-	GenreDTO genreRepo;
-	
-	@Autowired
 	RoleDTO roleRepo;
 	
-	
-	public void testGenreRepo() {
-		Genre test = new Genre();
-		test.setTitle("Bistro");
-		genreRepo.save(test);
-		assertThat(genreRepo.findByGenreTitle("Bistro")).isNotNull();
-		genreRepo.delete(test);
-		assertThat(genreRepo.findAll().size()).isZero();
-	}
-	
+	@Test
 	public void testManagerRepo() {
 		ManagerRole role = new ManagerRole();
 		role.setName("restaurant");

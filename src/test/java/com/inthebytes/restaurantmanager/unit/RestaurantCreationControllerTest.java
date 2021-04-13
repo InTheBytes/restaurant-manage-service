@@ -1,46 +1,24 @@
 package com.inthebytes.restaurantmanager.unit;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.aspectj.lang.annotation.Before;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inthebytes.restaurantmanager.control.RestaurantCreationController;
-import com.inthebytes.restaurantmanager.entity.Genre;
 import com.inthebytes.restaurantmanager.entity.Manager;
 import com.inthebytes.restaurantmanager.entity.ManagerRole;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
@@ -115,42 +93,6 @@ public class RestaurantCreationControllerTest {
 		.andExpect(MockMvcResultMatchers.status().isNotAcceptable());
 	}
 
-//	@Test
-//	public void updateRestaurantCreationTest() throws JsonProcessingException, Exception {
-//		Restaurant restaurant = makeRestaurantModel();
-//		when(service.updateRestaurant(restaurant)).thenReturn(restaurant);
-//
-//		mock.perform(put("/apis/restaurant/{restaurantId}", restaurant.getRestaurantId())
-//				.contentType(MediaType.APPLICATION_JSON)
-//				.content(new ObjectMapper().writeValueAsString(restaurant)))
-//		.andExpect(MockMvcResultMatchers.status().isOk())
-//		.andExpect(MockMvcResultMatchers.header().string("Restaurant-ID", Matchers.containsString("1")));
-//	}
-
-//	@Test
-//	public void updateRestaurantCreationInvalidTest() throws JsonProcessingException, Exception {
-//		Restaurant restaurant = makeRestaurantModel();
-//		when(service.submitRestaurant(restaurant)).thenReturn(null);
-//		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(true);
-//
-//		mock.perform(put("/apis/restaurant/{restaurantId}", restaurant.getRestaurantId())
-//				.contentType(MediaType.APPLICATION_JSON)
-//				.content(new ObjectMapper().writeValueAsString(restaurant)))
-//		.andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
-//	}
-//
-//	@Test
-//	public void updateRestaurantCreationNonexistentTest() throws JsonProcessingException, Exception {
-//		Restaurant restaurant = makeRestaurantModel();
-//		when(service.submitRestaurant(restaurant)).thenReturn(null);
-//		when(service.isSaved(restaurant.getRestaurantId())).thenReturn(false);
-//
-//		mock.perform(put("/apis/restaurant/{restaurantId}", restaurant.getRestaurantId())
-//				.contentType(MediaType.APPLICATION_JSON)
-//				.content(new ObjectMapper().writeValueAsString(restaurant)))
-//		.andExpect(MockMvcResultMatchers.status().isNotFound());
-//	}
-
 	@Test
 	public void viewRestaurantCreationTest() throws Exception {
 		Restaurant restaurant = makeRestaurantModel();
@@ -218,12 +160,6 @@ public class RestaurantCreationControllerTest {
 		manager.setUsername("myManagaer");
 		manager.setIsActive(false);
 		test.setManager(manager);
-
-		List<Genre> genres = new ArrayList<Genre>();
-		Genre genre = new Genre();
-		genre.setTitle("Fair Food");
-		genres.add(genre);
-		test.setGenres(genres);
 
 		return test;
 	}

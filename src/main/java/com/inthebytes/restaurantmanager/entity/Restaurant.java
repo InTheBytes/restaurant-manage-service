@@ -32,16 +32,16 @@ public class Restaurant implements Serializable {
 	@JoinColumn(name = "manager_id")
 	private Manager manager;
 	
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "location_id")
+	private Location location;
+	
 	@Column(name = "name")
 	private String name;
 	
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(
-			name = "restaurant_genre",
-			joinColumns = @JoinColumn(name = "restaurant_id"),
-			inverseJoinColumns = @JoinColumn(name = "genre_id"))
-	private List<Genre> genre;
-
+	@Column(name = "cuisine")
+	private String cuisine;
+	
 	public Long getRestaurantId() {
 		return restaurantId;
 	}
@@ -58,6 +58,14 @@ public class Restaurant implements Serializable {
 		this.manager = manager;
 	}
 
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -66,12 +74,12 @@ public class Restaurant implements Serializable {
 		this.name = name;
 	}
 
-	public List<Genre> getGenres() {
-		return genre;
+	public String getCuisine() {
+		return cuisine;
 	}
 
-	public void setGenres(List<Genre> genres) {
-		this.genre = genres;
+	public void setCuisine(String cuisine) {
+		this.cuisine = cuisine;
 	}
 
 	public static long getSerialversionuid() {

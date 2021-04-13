@@ -17,31 +17,13 @@ import com.inthebytes.restaurantmanager.entity.Restaurant;
 import com.inthebytes.restaurantmanager.service.RestaurantCreationService;
 
 @RestController
-@RequestMapping("/apis/restaurant")
+@RequestMapping("/apis")
 public class RestaurantCreationController {
 
 	@Autowired
 	RestaurantCreationService service;
 
-	@PostMapping(value = "/confirmation")
-	public ResponseEntity<Restaurant> addRestaurant(@RequestBody Restaurant restaurant) {
-		Restaurant result;
-		try {
-			result = service.submitRestaurant(restaurant);
-		} catch (NullPointerException e){
-			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-		}
-		if (result != null) {
-			HttpHeaders responseHeaders = new HttpHeaders();
-			responseHeaders.set("Restaurant-ID", Long.toString(result.getRestaurantId()));
-			return ResponseEntity.ok().headers(responseHeaders).body(result);
-		} else {
-			HttpStatus status = (service.isSaved(restaurant.getRestaurantId()) ? HttpStatus.NOT_ACCEPTABLE : HttpStatus.NOT_FOUND);
-			return ResponseEntity.status(status).build();
-		}
-	}
-
-	@PostMapping(value = "/starter")
+	@PostMapping(value = "/restaurant")
 	public ResponseEntity<Restaurant> startRestaurantCreation(@RequestBody Restaurant restaurant) {
 		Restaurant result;
 		try {
@@ -76,7 +58,7 @@ public class RestaurantCreationController {
 //		}
 //	}
 
-	@GetMapping("/preview/{restaurantId}")
+	@GetMapping("/restaurant/{restaurantId}")
 	public ResponseEntity<Restaurant> viewRestaurantCreation(@PathVariable("restaurantId") Long restaurantId) {
 		Restaurant restaurant = service.getRestaurantInProgress(restaurantId);
 		if (restaurant != null) {
@@ -89,7 +71,7 @@ public class RestaurantCreationController {
 		}
 	}
 
-	@DeleteMapping(value = "/{restaurantId}")
+	@DeleteMapping(value = "restaurant/{restaurantId}")
 	public ResponseEntity cancelRestaurantCreation(@PathVariable("restaurantId") Long restaurantId) {
 		Boolean flag = service.trashRestaurantProgress(restaurantId);
 		if (flag) {

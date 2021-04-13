@@ -2,18 +2,11 @@ package com.inthebytes.restaurantmanager.unit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,12 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.inthebytes.restaurantmanager.dto.ManagerDTO;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.dto.RoleDTO;
-import com.inthebytes.restaurantmanager.entity.Genre;
 import com.inthebytes.restaurantmanager.entity.Manager;
 import com.inthebytes.restaurantmanager.entity.ManagerRole;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 import com.inthebytes.restaurantmanager.service.RestaurantCreationService;
-import com.inthebytes.restaurantmanager.service.RestaurantVerificationService;
 
 @WebMvcTest(RestaurantCreationService.class)
 public class RestaurantCreationServiceTest {
@@ -34,8 +25,6 @@ public class RestaurantCreationServiceTest {
 	@InjectMocks
 	RestaurantCreationService service;
 	
-	@MockBean
-	RestaurantVerificationService verification;
 	@MockBean
 	BCryptPasswordEncoder encoder;
 	
@@ -45,11 +34,6 @@ public class RestaurantCreationServiceTest {
 	RoleDTO roleRepo;
 	@MockBean
 	RestaurantDTO restaurantRepo;
-	
-	@BeforeEach
-	void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
-	}
 	
 	@Test
 	public void getRestaurantInProgressTest() {
@@ -94,8 +78,7 @@ public class RestaurantCreationServiceTest {
 		when(restaurantRepo.findByName(test.getName())).thenReturn(test);
 		when(restaurantRepo.save(test)).thenReturn(test);
 		when(managerRepo.save(test.getManager())).thenReturn(test.getManager());
-		when(verification.checkForFinished(test)).thenReturn(true);
-		
+
 		assertThat(service.submitRestaurant(test)).isNotNull();
 		assertThat(service.submitRestaurant(new Restaurant())).isNull();
 	}
@@ -104,9 +87,6 @@ public class RestaurantCreationServiceTest {
 	public void startRestaurantTest() {
 		Restaurant test = makeRestaurantModel();
 		when(restaurantRepo.save(test)).thenReturn(test);
-		when(verification.checkManager(test.getManager())).thenReturn(true);
-		when(verification.checkBasics(test)).thenReturn(true);
-		when(verification.checkGenres(test)).thenReturn(true);
 		
 		assertThat(service.startRestaurant(test)).isNotNull();
 		assertThat(service.startRestaurant(new Restaurant())).isNull();
@@ -140,12 +120,6 @@ public class RestaurantCreationServiceTest {
 		manager.setUsername("myManagaer");
 		manager.setIsActive(false);
 		test.setManager(manager);
-
-		List<Genre> genres = new ArrayList<Genre>();
-		Genre genre = new Genre();
-		genre.setTitle("Fair Food");
-		genres.add(genre);
-		test.setGenres(genres);
 
 		return test;
 	}

@@ -15,8 +15,7 @@ public class RestaurantCreationService {
 
 	@Autowired
 	private BCryptPasswordEncoder encoder;
-	@Autowired
-	private RestaurantVerificationService verification;
+
 
 	@Autowired
 	private ManagerDTO managerRepo;
@@ -57,9 +56,6 @@ public class RestaurantCreationService {
 			if (submission == null)
 				return null;
 		}
-		if (!verification.checkForFinished(submission)) {
-			return null;
-		}
 
 		submission.getManager().setIsActive(true);
 		submission.setManager(managerRepo.save(submission.getManager()));
@@ -67,14 +63,7 @@ public class RestaurantCreationService {
 	}
 	
 	public Restaurant startRestaurant(Restaurant startingRestaurant) {
-		if (!verification.checkManager(startingRestaurant.getManager())) {
-			startingRestaurant.setManager(generateManager(startingRestaurant));
-		}
-		startingRestaurant.getManager().setIsActive(false);
-		if (!verification.checkBasics(startingRestaurant))
-			return null;
-		if(!verification.checkGenres(startingRestaurant))
-			return null;
+		startingRestaurant.setManager(generateManager(startingRestaurant));
 		
 		return restaurantRepo.save(startingRestaurant);
 	}
