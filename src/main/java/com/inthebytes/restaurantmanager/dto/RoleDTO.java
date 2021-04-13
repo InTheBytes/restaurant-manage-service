@@ -3,9 +3,9 @@ package com.inthebytes.restaurantmanager.dto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.inthebytes.restaurantmanager.entity.ManagerRoleModel;
+import com.inthebytes.restaurantmanager.entity.ManagerRole;
 
 @Repository
-public interface RoleDTO extends JpaRepository<ManagerRoleModel, Long> {
-	ManagerRoleModel findRoleByName(String name);
+public interface RoleDTO extends JpaRepository<ManagerRole, Long> {
+	ManagerRole findRoleByName(String name);
 }

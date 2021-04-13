@@ -11,11 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import com.inthebytes.restaurantmanager.entity.ManagerRoleModel;
+import com.inthebytes.restaurantmanager.entity.ManagerRole;
 
 @Entity
 @Table(name = "user")
-public class ManagerModel implements Serializable {
+public class Manager implements Serializable {
 
 	private static final long serialVersionUID = -1379712999231146750L;
 	
@@ -26,7 +26,7 @@ public class ManagerModel implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "user_role")
-	private ManagerRoleModel role;
+	private ManagerRole role;
 	
 	@Column(name = "username", nullable = false)
 	private String username;
@@ -57,11 +57,11 @@ public class ManagerModel implements Serializable {
 		this.managerId = managerId;
 	}
 
-	public ManagerRoleModel getRole() {
+	public ManagerRole getRole() {
 		return role;
 	}
 
-	public void setRole(ManagerRoleModel role) {
+	public void setRole(ManagerRole role) {
 		this.role = role;
 	}
 
@@ -141,7 +141,7 @@ public class ManagerModel implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ManagerModel other = (ManagerModel) obj;
+		Manager other = (Manager) obj;
 		if (managerId == null) {
 			if (other.managerId != null)
 				return false;

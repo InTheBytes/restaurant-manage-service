@@ -13,32 +13,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.inthebytes.restaurantmanager.entity.RestaurantModel;
+import com.inthebytes.restaurantmanager.entity.Restaurant;
 import com.inthebytes.restaurantmanager.service.RestaurantCreationService;
 
 @RestController
-@RequestMapping("/creator/restaurant")
+@RequestMapping("/apis")
 public class RestaurantCreationController {
 
 	@Autowired
 	RestaurantCreationService service;
 
-	@PostMapping(value = "/confirmation")
-	public ResponseEntity<RestaurantModel> addRestaurant(@RequestBody RestaurantModel restaurant) {
-		RestaurantModel result = service.submitRestaurant(restaurant);
-		if (result != null) {
-			HttpHeaders responseHeaders = new HttpHeaders();
-			responseHeaders.set("Restaurant-ID", Long.toString(result.getRestaurantId()));
-			return ResponseEntity.ok().headers(responseHeaders).body(result);
-		} else {
-			HttpStatus status = (service.isSaved(restaurant.getRestaurantId()) ? HttpStatus.NOT_ACCEPTABLE : HttpStatus.NOT_FOUND);
-			return ResponseEntity.status(status).build();
+	@PostMapping(value = "/restaurant")
+	public ResponseEntity<Restaurant> startRestaurantCreation(@RequestBody Restaurant restaurant) {
+		Restaurant result;
+		try {
+			result = service.startRestaurant(restaurant);
+		} catch (NullPointerException e) {
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 		}
-	}
-
-	@PostMapping(value = "/starter")
-	public ResponseEntity<RestaurantModel> startRestaurantCreation(@RequestBody RestaurantModel restaurant) {
-		RestaurantModel result = service.startRestaurant(restaurant);
 		if (result != null) {
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("Restaurant-ID", Long.toString(result.getRestaurantId()));
@@ -48,22 +40,27 @@ public class RestaurantCreationController {
 		}
 	}
 
-	@PutMapping(value = "/{restaurantId}")
-	public ResponseEntity<RestaurantModel> updateRestaurantCreation(@RequestBody RestaurantModel restaurant) {
-		RestaurantModel result = service.updateRestaurant(restaurant);
-		if (result != null) {
-			HttpHeaders responseHeaders = new HttpHeaders();
-			responseHeaders.set("Restaurant-ID", Long.toString(result.getRestaurantId()));
-			return ResponseEntity.ok().headers(responseHeaders).body(result);
-		} else {
-			HttpStatus status = (service.isSaved(restaurant.getRestaurantId()) ? HttpStatus.METHOD_NOT_ALLOWED : HttpStatus.NOT_FOUND);
-			return ResponseEntity.status(status).build();
-		}
-	}
+//	@PutMapping(value = "/{restaurantId}")
+//	public ResponseEntity<Restaurant> updateRestaurantCreation(@RequestBody Restaurant restaurant) {
+//		Restaurant result;
+//		try {
+//			result = service.updateRestaurant(restaurant);
+//		} catch (NullPointerException e) {
+//			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//		}
+//		if (result != null) {
+//			HttpHeaders responseHeaders = new HttpHeaders();
+//			responseHeaders.set("Restaurant-ID", Long.toString(result.getRestaurantId()));
+//			return ResponseEntity.ok().headers(responseHeaders).body(result);
+//		} else {
+//			HttpStatus status = (service.isSaved(restaurant.getRestaurantId()) ? HttpStatus.METHOD_NOT_ALLOWED : HttpStatus.NOT_FOUND);
+//			return ResponseEntity.status(status).build();
+//		}
+//	}
 
-	@GetMapping("/preview/{restaurantId}")
-	public ResponseEntity<RestaurantModel> viewRestaurantCreation(@PathVariable("restaurantId") Long restaurantId) {
-		RestaurantModel restaurant = service.getRestaurantInProgress(restaurantId);
+	@GetMapping("/restaurant/{restaurantId}")
+	public ResponseEntity<Restaurant> viewRestaurantCreation(@PathVariable("restaurantId") Long restaurantId) {
+		Restaurant restaurant = service.getRestaurantInProgress(restaurantId);
 		if (restaurant != null) {
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("Restaurant-ID", Long.toString(restaurantId));
@@ -74,7 +71,7 @@ public class RestaurantCreationController {
 		}
 	}
 
-	@DeleteMapping(value = "/{restaurantId}")
+	@DeleteMapping(value = "restaurant/{restaurantId}")
 	public ResponseEntity cancelRestaurantCreation(@PathVariable("restaurantId") Long restaurantId) {
 		Boolean flag = service.trashRestaurantProgress(restaurantId);
 		if (flag) {
