@@ -1,4 +1,4 @@
-package com.inthebytes.restaurantmanager.unit;
+package com.inthebytes.restaurantmanager;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
