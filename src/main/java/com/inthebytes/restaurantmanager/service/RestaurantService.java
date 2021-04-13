@@ -7,7 +7,7 @@ import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 
 @Service
-public class RestaurantCreationService {
+public class RestaurantService {
 	
 	@Autowired
 	private RestaurantDTO restaurantRepo;

@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inthebytes.restaurantmanager.entity.Restaurant;
-import com.inthebytes.restaurantmanager.service.RestaurantCreationService;
+import com.inthebytes.restaurantmanager.service.RestaurantService;
 
 @RestController
 @RequestMapping("/apis")
-public class RestaurantCreationController {
+public class RestaurantController {
 	
 	@Autowired
-	private RestaurantCreationService service;
+	private RestaurantService service;
 
 	@PostMapping(value = "/restaurant")
 	public ResponseEntity<Restaurant> startRestaurantCreation(@RequestBody Restaurant restaurant) {

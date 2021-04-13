@@ -1,5 +1,5 @@
 package com.inthebytes.restaurantmanager.control;
 
-public class RestaurantCreationControllerTest {
+public class RestaurantControllerTest {
 
 }
