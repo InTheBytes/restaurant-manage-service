@@ -19,16 +19,14 @@ public class RestaurantController {
 	RestaurantService service;
 
 	@DeleteMapping(value = "restaurant/{restaurantId}")
-	public ResponseEntity deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
-		Boolean flag = service.delete(restaurantId);
-		if (flag) {
+	public ResponseEntity<?> deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
+		if (service.delete(restaurantId)) {
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("Deleted-Restaurant-ID", Long.toString(restaurantId));
 			return ResponseEntity.ok().headers(responseHeaders).build();
 		}
 		else {
-			HttpStatus result = HttpStatus.NOT_FOUND;
-			return ResponseEntity.status(result).build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
 }
