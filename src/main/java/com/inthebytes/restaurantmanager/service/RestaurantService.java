@@ -1,5 +1,7 @@
 package com.inthebytes.restaurantmanager.service;
 
+import javax.persistence.EntityExistsException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +14,18 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantDTO restaurantRepo;
 
-	public Restaurant startRestaurant(Restaurant restaurant) {
-		// TODO Auto-generated method stub
-		return null;
+	public Restaurant createRestaurant(Restaurant restaurant) throws IllegalArgumentException, EntityExistsException {
+		Restaurant stored;
+		
+		try {
+			stored = restaurantRepo.findByName(restaurant.getName());
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException();
+		}
+		
+		if (stored != null)
+			throw new EntityExistsException();
+			
+		return restaurantRepo.save(restaurant);
 	}
 }
