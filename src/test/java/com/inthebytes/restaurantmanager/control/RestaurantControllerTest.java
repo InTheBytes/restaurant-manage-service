@@ -3,9 +3,6 @@ package com.inthebytes.restaurantmanager.control;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.EntityExistsException;
 
 import org.hamcrest.Matchers;
