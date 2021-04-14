@@ -28,62 +28,62 @@ import com.inthebytes.restaurantmanager.service.RestaurantService;
 @AutoConfigureMockMvc
 public class RestaurantControllerTest {
 
-		@Autowired
-		private MockMvc mock;
-		
-		@MockBean
-		private RestaurantService service;
-		
-		private Restaurant makeRestaurantModel() {
-			Restaurant test = new Restaurant();
-			test.setName("Lexi's Burgers");
+	@Autowired
+	private MockMvc mock;
 
-			Location location = new Location();
-			location.setStreet("Main St.");
-			location.setUnit("123");
-			location.setCity("Sacramento");
-			location.setState("California");
-			location.setZipCode(95838);
-			test.setLocation(location);
+	@MockBean
+	private RestaurantService service;
 
-			test.setCuisine("Fast Food");
+	@Test
+	public void createRestaurantTest() throws JsonProcessingException, Exception {
+		Restaurant restaurant = makeRestaurantModel();
+		Restaurant result = restaurant;
+		result.setRestaurantId(22L);
+		when(service.createRestaurant(restaurant)).thenReturn(result);
 
-			return test;
-		}
+		mock.perform(post("/creator/restaurant/starter")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(restaurant)))
+		.andExpect(MockMvcResultMatchers.status().isCreated())
+		.andExpect(MockMvcResultMatchers.header().string("Restaurant-ID", Matchers.containsString("22")));
+	}
 
-		@Test
-		public void createRestaurantTest() throws JsonProcessingException, Exception {
-			Restaurant restaurant = makeRestaurantModel();
-			Restaurant result = restaurant;
-			result.setRestaurantId(22L);
-			when(service.createRestaurant(restaurant)).thenReturn(result);
+	@Test
+	public void createInvalidRestaurantTest() throws JsonProcessingException, Exception {
+		Restaurant restaurant = makeRestaurantModel();
+		when(service.createRestaurant(restaurant)).thenThrow(new IllegalArgumentException());
 
-			mock.perform(post("/creator/restaurant/starter")
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(restaurant)))
-			.andExpect(MockMvcResultMatchers.status().isCreated())
-			.andExpect(MockMvcResultMatchers.header().string("Restaurant-ID", Matchers.containsString("22")));
-		}
+		mock.perform(post("/creator/restaurant/starter")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(restaurant)))
+		.andExpect(MockMvcResultMatchers.status().isNotAcceptable());
+	}
 
-		@Test
-		public void createInvalidRestaurantTest() throws JsonProcessingException, Exception {
-			Restaurant restaurant = makeRestaurantModel();
-			when(service.createRestaurant(restaurant)).thenThrow(new IllegalArgumentException());
+	@Test
+	public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
+		Restaurant restaurant = makeRestaurantModel();
+		when(service.createRestaurant(restaurant)).thenThrow(new EntityExistsException());
 
-			mock.perform(post("/creator/restaurant/starter")
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(restaurant)))
-			.andExpect(MockMvcResultMatchers.status().isNotAcceptable());
-		}
-		
-		@Test
-		public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
-			Restaurant restaurant = makeRestaurantModel();
-			when(service.createRestaurant(restaurant)).thenThrow(new EntityExistsException());
+		mock.perform(post("/creator/restaurant/starter")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(restaurant)))
+		.andExpect(MockMvcResultMatchers.status().isConflict());
+	}
 
-			mock.perform(post("/creator/restaurant/starter")
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(restaurant)))
-			.andExpect(MockMvcResultMatchers.status().isConflict());
-		}
+	private Restaurant makeRestaurantModel() {
+		Restaurant test = new Restaurant();
+		test.setName("Lexi's Burgers");
+
+		Location location = new Location();
+		location.setStreet("Main St.");
+		location.setUnit("123");
+		location.setCity("Sacramento");
+		location.setState("California");
+		location.setZipCode(95838);
+		test.setLocation(location);
+
+		test.setCuisine("Fast Food");
+
+		return test;
+	}
 }
