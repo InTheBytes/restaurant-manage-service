@@ -1,17 +1,21 @@
 package com.inthebytes.restaurantmanager.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name = "restaurant")
@@ -33,6 +37,11 @@ public class Restaurant implements Serializable {
 	
 	@Column(name = "cuisine")
 	private String cuisine;
+	
+	@Nullable
+	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//	@JoinColumn(name = "restaurant_id", table = "food")
+	private Collection<Food> foods;
 	
 	public Long getRestaurantId() {
 		return restaurantId;
@@ -64,6 +73,14 @@ public class Restaurant implements Serializable {
 
 	public void setCuisine(String cuisine) {
 		this.cuisine = cuisine;
+	}
+
+	public Collection<Food> getFoods() {
+		return foods;
+	}
+
+	public void setFoods(Collection<Food> foods) {
+		this.foods = foods;
 	}
 
 	public static long getSerialversionuid() {
