@@ -2,6 +2,7 @@ package com.inthebytes.restaurantmanager.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,26 +23,26 @@ import org.springframework.lang.Nullable;
 public class Restaurant implements Serializable {
 
 	private static final long serialVersionUID = -8756584311354409044L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "restaurant_id")
 	private Long restaurantId;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "location_id")
 	private Location location;
-	
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "cuisine")
 	private String cuisine;
-	
+
 	@Nullable
 	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private Collection<Food> foods;
-	
+	private List<Food> foods;
+
 	public Long getRestaurantId() {
 		return restaurantId;
 	}
@@ -78,7 +79,12 @@ public class Restaurant implements Serializable {
 		return foods;
 	}
 
-	public void setFoods(Collection<Food> foods) {
+	public void setFoods(List<Food> foods) {
+		if (foods != null && foods.size() != 0) {
+			for (Food food : foods) {
+				food.setRestaurant(this);
+			}
+		}
 		this.foods = foods;
 	}
 
