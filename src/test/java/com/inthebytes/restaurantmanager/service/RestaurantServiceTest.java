@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,14 +32,16 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class RestaurantServiceTest {
 	
-	@InjectMocks
-	RestaurantService service;
+	
 
 	@Mock
 	RestaurantDTO repo;
+	
+	@InjectMocks
+	RestaurantService service;
 //	
 //	@Before
 //	public void init() {
@@ -50,6 +53,8 @@ public class RestaurantServiceTest {
 		Restaurant restaurant = makeRestaurantModel();
 		Restaurant result = restaurant;
 		result.setRestaurantId(22L);
+		
+		MockitoAnnotations.initMocks(this);
 
 		when(repo.findByName(restaurant.getName())).thenReturn(null);
 		when(repo.save(restaurant)).thenReturn(result);
@@ -62,6 +67,8 @@ public class RestaurantServiceTest {
 	@Test
 	public void createInvalidRestaurantTest() throws JsonProcessingException, Exception {
 		Restaurant restaurant = makeRestaurantModel();
+		
+		MockitoAnnotations.initMocks(this);
 
 		when(repo.findByName(restaurant.getName())).thenThrow(new NullPointerException());
 
@@ -71,6 +78,8 @@ public class RestaurantServiceTest {
 	@Test
 	public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
 		Restaurant restaurant = makeRestaurantModel();
+		
+		MockitoAnnotations.initMocks(this);
 
 		when(repo.findByName(restaurant.getName())).thenReturn(restaurant);
 
