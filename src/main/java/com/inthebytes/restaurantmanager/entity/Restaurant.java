@@ -40,7 +40,6 @@ public class Restaurant implements Serializable {
 	
 	@Nullable
 	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//	@JoinColumn(name = "restaurant_id", table = "food")
 	private Collection<Food> foods;
 	
 	public Long getRestaurantId() {
