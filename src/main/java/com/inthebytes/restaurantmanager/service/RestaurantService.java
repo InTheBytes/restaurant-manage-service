@@ -12,7 +12,7 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantDTO restaurantRepo;
 
-	public Boolean delete(Long restaurantId) {
+	public Boolean deleteRestaurant(Long restaurantId) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
 		if (restaurant == null)
 			return false;

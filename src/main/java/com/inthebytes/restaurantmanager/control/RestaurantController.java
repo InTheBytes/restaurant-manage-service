@@ -18,9 +18,9 @@ public class RestaurantController {
 	@Autowired
 	RestaurantService service;
 
-	@DeleteMapping(value = "restaurant/{restaurantId}")
+	@DeleteMapping(value = "/restaurant/{restaurantId}")
 	public ResponseEntity<?> deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
-		if (service.delete(restaurantId)) {
+		if (service.deleteRestaurant(restaurantId)) {
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("Deleted-Restaurant-ID", Long.toString(restaurantId));
 			return ResponseEntity.ok().headers(responseHeaders).build();
