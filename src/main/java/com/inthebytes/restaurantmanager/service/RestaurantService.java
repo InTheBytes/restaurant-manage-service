@@ -1,9 +1,15 @@
 package com.inthebytes.restaurantmanager.service;
 
-import javax.persistence.EntityExistsException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.PersistenceException;
+
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
@@ -25,7 +31,11 @@ public class RestaurantService {
 		
 		if (stored != null)
 			throw new EntityExistsException();
-			
-		return restaurantRepo.save(restaurant);
+		
+		try {
+			return restaurantRepo.save(restaurant);
+		} catch (DataIntegrityViolationException e) {
+			throw new IllegalArgumentException();
+		}
 	}
 }

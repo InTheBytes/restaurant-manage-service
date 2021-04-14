@@ -35,18 +35,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class RestaurantServiceTest {
 	
-	
-
 	@Mock
 	RestaurantDTO repo;
 	
 	@InjectMocks
 	RestaurantService service;
-//	
-//	@Before
-//	public void init() {
-//	    MockitoAnnotations.initMocks(this);
-//	}
 
 	@Test
 	public void createRestaurantTest() throws JsonProcessingException, Exception {
