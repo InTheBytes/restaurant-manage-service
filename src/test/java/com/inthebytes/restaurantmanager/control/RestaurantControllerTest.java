@@ -41,7 +41,7 @@ public class RestaurantControllerTest {
 		result.setRestaurantId(22L);
 		when(service.createRestaurant(restaurant)).thenReturn(result);
 
-		mock.perform(post("/creator/restaurant/starter")
+		mock.perform(post("/apis/restaurant")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isCreated())
@@ -53,7 +53,7 @@ public class RestaurantControllerTest {
 		Restaurant restaurant = makeRestaurantModel();
 		when(service.createRestaurant(restaurant)).thenThrow(new IllegalArgumentException());
 
-		mock.perform(post("/creator/restaurant/starter")
+		mock.perform(post("/apis/restaurant")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isNotAcceptable());
@@ -64,7 +64,7 @@ public class RestaurantControllerTest {
 		Restaurant restaurant = makeRestaurantModel();
 		when(service.createRestaurant(restaurant)).thenThrow(new EntityExistsException());
 
-		mock.perform(post("/creator/restaurant/starter")
+		mock.perform(post("/apis/restaurant")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isConflict());
