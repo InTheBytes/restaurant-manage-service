@@ -31,7 +31,7 @@ public class RestaurantController {
 		try {
 			RestaurantDTO result = service.createRestaurant(restaurant);
 			HttpHeaders headers = new HttpHeaders();
-			headers.set("Restaurant-ID", Long.toString(result.getRestaurantId()));
+			headers.set("Location", Long.toString(result.getRestaurantId()));
 			return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(result);
 		}
 		catch (EntityExistsException e) {
