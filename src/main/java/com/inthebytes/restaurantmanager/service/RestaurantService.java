@@ -15,7 +15,7 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantRepository restaurantRepo;
 
-	public Restaurant createRestaurant(Restaurant restaurant) throws IllegalArgumentException, EntityExistsException {
+	public Restaurant createRestaurant(Restaurant restaurant) {
 		Restaurant stored;
 
 		try {
