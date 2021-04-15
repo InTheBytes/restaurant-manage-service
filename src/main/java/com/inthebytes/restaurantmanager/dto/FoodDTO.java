@@ -26,6 +26,14 @@ public class FoodDTO {
 	@JsonIgnore
 	private RestaurantDTO restaurant;
 
+	public Long getFoodId() {
+		return foodId;
+	}
+
+	public void setFoodId(Long foodId) {
+		this.foodId = foodId;
+	}
+
 	public String getName() {
 		return name;
 	}

@@ -12,10 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.lang.Nullable;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "food")
 public class Food implements Serializable {
@@ -36,7 +32,6 @@ public class Food implements Serializable {
 	@Column(name = "description")
 	private String description;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "restaurant_id", referencedColumnName = "restaurant_id")
 	private Restaurant restaurant;
