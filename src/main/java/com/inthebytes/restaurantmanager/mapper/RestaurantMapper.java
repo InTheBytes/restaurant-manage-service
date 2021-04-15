@@ -3,6 +3,8 @@ package com.inthebytes.restaurantmanager.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.inthebytes.restaurantmanager.dto.FoodDTO;
 import com.inthebytes.restaurantmanager.dto.LocationDTO;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
@@ -10,10 +12,10 @@ import com.inthebytes.restaurantmanager.entity.Food;
 import com.inthebytes.restaurantmanager.entity.Location;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 
-
-public interface RestaurantMapper {
+@Component
+public class RestaurantMapper {
 	
-	public default Restaurant convert(RestaurantDTO dto) {
+	public Restaurant convert(RestaurantDTO dto) {
 		Restaurant entity = new Restaurant();
 		
 		if (dto.getRestaurantId() != null)
@@ -23,6 +25,8 @@ public interface RestaurantMapper {
 		entity.setLocation(convert(dto.getLocation()));
 		
 		List<Food> foods = new ArrayList<Food>();
+		if (dto.getFoods() == null)
+			return entity;
 		for (FoodDTO food : dto.getFoods()) {
 			Food f = convert(food);
 			f.setRestaurant(entity);
@@ -33,7 +37,7 @@ public interface RestaurantMapper {
 		return entity;
 	}
 	
-	public default RestaurantDTO convert(Restaurant entity) {
+	public RestaurantDTO convert(Restaurant entity) {
 		RestaurantDTO dto = new RestaurantDTO(
 				entity.getName(), 
 				entity.getCuisine(), 
@@ -41,6 +45,8 @@ public interface RestaurantMapper {
 		
 		dto.setRestaurantId(entity.getRestaurantId());
 		
+		if (entity.getFoods() == null)
+			return dto;
 		List<FoodDTO> foods = new ArrayList<FoodDTO>();
 		for (Food food : entity.getFoods()) {
 			FoodDTO f = convert(food);
@@ -52,7 +58,7 @@ public interface RestaurantMapper {
 		return dto;
 	}
 	
-	public default Location convert(LocationDTO dto) {
+	public Location convert(LocationDTO dto) {
 		Location entity = new Location();
 		
 		if (dto.getLocationId() != null)
@@ -66,7 +72,7 @@ public interface RestaurantMapper {
 		return entity;
 	}
 	
-	public default LocationDTO convert(Location entity) {
+	public LocationDTO convert(Location entity) {
 		LocationDTO dto = new LocationDTO(
 				entity.getStreet(), 
 				entity.getUnit(), 
@@ -79,7 +85,7 @@ public interface RestaurantMapper {
 		return dto;
 	}
 	
-	public default Food convert(FoodDTO dto) {
+	public Food convert(FoodDTO dto) {
 		Food entity = new Food();
 		
 		if (dto.getFoodId() != null)
@@ -91,7 +97,7 @@ public interface RestaurantMapper {
 		return entity;
 	}
 	
-	public default FoodDTO convert(Food entity) {
+	public FoodDTO convert(Food entity) {
 		FoodDTO dto = new FoodDTO(
 				entity.getName(), 
 				entity.getPrice(), 
