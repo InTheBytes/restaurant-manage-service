@@ -6,6 +6,9 @@ import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityExistsException;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,17 +16,18 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Location;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
+import com.inthebytes.restaurantmanager.repository.RestaurantRepository;
+
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RestaurantServiceTest {
-	
+
 	@Mock
-	RestaurantDTO repo;
-	
+	RestaurantRepository repo;
+
 	@InjectMocks
 	RestaurantService service;
 
@@ -65,6 +69,23 @@ public class RestaurantServiceTest {
 		assertThatThrownBy(() -> service.createRestaurant(restaurant)).isInstanceOf(EntityExistsException.class);
 	}
 
+	public void deleteRestaurantTest() {
+		MockitoAnnotations.initMocks(this);
+
+		when(repo.findByRestaurantId(22L)).thenReturn(new Restaurant());
+
+		assertTrue(service.deleteRestaurant(22L));
+	}
+
+	@Test
+	public void deleteNonexistentRestaurantTest() {
+		MockitoAnnotations.initMocks(this);
+
+		when(repo.findByRestaurantId(22L)).thenReturn(null);
+
+		assertFalse(service.deleteRestaurant(22L));
+	}
+	
 	private Restaurant makeRestaurantModel() {
 		Restaurant test = new Restaurant();
 		test.setName("Lexi's Burgers");

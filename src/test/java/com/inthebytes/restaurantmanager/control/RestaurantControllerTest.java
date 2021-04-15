@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import javax.persistence.EntityExistsException;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inthebytes.restaurantmanager.entity.Location;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
+
 import com.inthebytes.restaurantmanager.service.RestaurantService;
 
 @WebMvcTest(RestaurantController.class)
@@ -30,6 +32,7 @@ public class RestaurantControllerTest {
 
 	@MockBean
 	private RestaurantService service;
+
 
 	@Test
 	public void createRestaurantTest() throws JsonProcessingException, Exception {
@@ -67,6 +70,23 @@ public class RestaurantControllerTest {
 		.andExpect(MockMvcResultMatchers.status().isConflict());
 	}
 
+	@Test
+	public void deleteRestaurantTest() throws Exception{
+		when(service.deleteRestaurant(22L)).thenReturn(true);
+		
+		mock.perform(delete("/apis/restaurant/22"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.header().string("Deleted-Restaurant-ID", Matchers.containsString("22")));
+	}
+
+	@Test
+	public void deleteNonexistentRestaurantTest() throws Exception {
+		when(service.deleteRestaurant(22L)).thenReturn(false);
+		
+		mock.perform(delete("/apis/restaurant/22"))
+		.andExpect(MockMvcResultMatchers.status().isNotFound());
+	}
+	
 	private Restaurant makeRestaurantModel() {
 		Restaurant test = new Restaurant();
 		test.setName("Lexi's Burgers");
