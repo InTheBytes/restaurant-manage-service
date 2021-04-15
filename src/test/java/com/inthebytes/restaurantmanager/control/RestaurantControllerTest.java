@@ -33,21 +33,21 @@ public class RestaurantControllerTest {
 	@Autowired
 	MockMvc mock;
 
-
 	@Test
 	public void createRestaurantTest() throws JsonProcessingException, Exception {
 		RestaurantDTO restaurant = makeRestaurantModel();
 		RestaurantDTO result = makeRestaurantModel();
 		result.setRestaurantId(22L);
-		
+		System.out.println("\n\n\n\n\n\n\n"+result.getRestaurantId()+"\n\n\n\n\n\n");
 		//WHY DON'T YOU WORK?!?!?!?!
 		when(service.createRestaurant(restaurant)).thenReturn(result);
-//
-//		mock.perform(post("/apis/restaurant")
-//				.contentType(MediaType.APPLICATION_JSON)
-//				.content(new ObjectMapper().writeValueAsString(restaurant)))
-//		.andExpect(MockMvcResultMatchers.status().isCreated())
-//		.andExpect(MockMvcResultMatchers.header().string("Restaurant-ID", Matchers.containsString("22")));
+
+		System.out.println("after " + service.createRestaurant(restaurant).getName() + service.createRestaurant(restaurant).getRestaurantId());
+		mock.perform(post("/apis/restaurant")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(restaurant)))
+		.andExpect(MockMvcResultMatchers.status().isCreated())
+		.andExpect(MockMvcResultMatchers.header().string("Location", Matchers.containsString("22")));
 	}
 
 	@Test
@@ -68,8 +68,7 @@ public class RestaurantControllerTest {
 		when(service.deleteRestaurant(22L)).thenReturn(true);
 		
 		mock.perform(delete("/apis/restaurant/22"))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.header().string("Deleted-Restaurant-ID", Matchers.containsString("22")));
+		.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test

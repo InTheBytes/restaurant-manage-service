@@ -24,12 +24,15 @@ import com.inthebytes.restaurantmanager.service.RestaurantService;
 public class RestaurantController {
 
 	@Autowired
-	private RestaurantService service;
+	RestaurantService service;
 
 	@PostMapping(value = "")
 	public ResponseEntity<RestaurantDTO> startRestaurantCreation(@Valid @RequestBody RestaurantDTO restaurant) {
 		try {
 			RestaurantDTO result = service.createRestaurant(restaurant);
+			System.out.println("\n\n\n\n\n\n\n"+restaurant.getName());
+			System.out.println(result.getName()+"\n\n\n\n\n\n");
+			System.out.println(result.getRestaurantId()+"\n\n\n\n\n\n");
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("Location", Long.toString(result.getRestaurantId()));
 			return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(result);
@@ -43,9 +46,7 @@ public class RestaurantController {
 	@DeleteMapping(value = "/{restaurantId}")
 	public ResponseEntity<?> deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
 		if (service.deleteRestaurant(restaurantId)) {
-			HttpHeaders responseHeaders = new HttpHeaders();
-			responseHeaders.set("Deleted-Restaurant-ID", Long.toString(restaurantId));
-			return ResponseEntity.ok().headers(responseHeaders).build();
+			return ResponseEntity.ok().build();
 		}
 		else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
