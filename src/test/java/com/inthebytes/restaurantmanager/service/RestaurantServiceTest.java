@@ -16,8 +16,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.inthebytes.restaurantmanager.dto.LocationDTO;
+import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Location;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
+import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
 import com.inthebytes.restaurantmanager.repository.RestaurantRepository;
 
 import org.mockito.junit.MockitoJUnitRunner;
@@ -27,46 +30,44 @@ public class RestaurantServiceTest {
 
 	@Mock
 	RestaurantRepository repo;
+	
+	@Mock
+	RestaurantMapper mapper;
 
 	@InjectMocks
 	RestaurantService service;
 
 	@Test
 	public void createRestaurantTest() throws JsonProcessingException, Exception {
-		Restaurant restaurant = makeRestaurantModel();
-		Restaurant result = restaurant;
+		RestaurantDTO dto = makeRestaurantDTO();
+		RestaurantDTO returnedDto = dto;
+		Restaurant entity = makeRestaurantEntity();
+		Restaurant result = entity;
 		result.setRestaurantId(22L);
+		returnedDto.setRestaurantId(22L);
 		
 		MockitoAnnotations.initMocks(this);
 
-		when(repo.findByName(restaurant.getName())).thenReturn(null);
-		when(repo.save(restaurant)).thenReturn(result);
+		when(mapper.convert(dto)).thenReturn(entity);
+		when(mapper.convert(result)).thenReturn(dto);
+		when(repo.findByName(dto.getName())).thenReturn(null);
+		when(repo.save(entity)).thenReturn(result);
 
-		Restaurant created = service.createRestaurant(restaurant);
-		assertThat(created.getName()).isSameAs(restaurant.getName());
+		RestaurantDTO created = service.createRestaurant(dto);
+		assertThat(created.getName()).isSameAs(dto.getName());
 		assertThat(created.getRestaurantId()).isSameAs(22L);
 	}
 
 	@Test
-	public void createInvalidRestaurantTest() throws JsonProcessingException, Exception {
-		Restaurant restaurant = makeRestaurantModel();
-		
-		MockitoAnnotations.initMocks(this);
-
-		when(repo.findByName(restaurant.getName())).thenThrow(new NullPointerException());
-
-		assertThatThrownBy(() -> service.createRestaurant(restaurant)).isInstanceOf(IllegalArgumentException.class);
-	}
-
-	@Test
 	public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
-		Restaurant restaurant = makeRestaurantModel();
+		RestaurantDTO dto = makeRestaurantDTO();
+		Restaurant entity = makeRestaurantEntity();
 		
 		MockitoAnnotations.initMocks(this);
 
-		when(repo.findByName(restaurant.getName())).thenReturn(restaurant);
+		when(repo.findByName(dto.getName())).thenReturn(entity);
 
-		assertThatThrownBy(() -> service.createRestaurant(restaurant)).isInstanceOf(EntityExistsException.class);
+		assertThatThrownBy(() -> service.createRestaurant(dto)).isInstanceOf(EntityExistsException.class);
 	}
 
 	public void deleteRestaurantTest() {
@@ -86,7 +87,14 @@ public class RestaurantServiceTest {
 		assertFalse(service.deleteRestaurant(22L));
 	}
 	
-	private Restaurant makeRestaurantModel() {
+	private RestaurantDTO makeRestaurantDTO() {
+		LocationDTO location = new LocationDTO("Main St.", "123", "Sacramento", "California", 11111);
+		RestaurantDTO test = new RestaurantDTO("Lexi's Burgers", "Fast Food", location);
+
+		return test;
+	}
+	
+	private Restaurant makeRestaurantEntity() {
 		Restaurant test = new Restaurant();
 		test.setName("Lexi's Burgers");
 

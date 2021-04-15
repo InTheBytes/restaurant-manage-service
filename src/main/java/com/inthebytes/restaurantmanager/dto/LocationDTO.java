@@ -9,6 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class LocationDTO {
 
+	public LocationDTO(String street, String unit, String city, String state, Integer zipCode) {
+		super();
+		this.street = street;
+		this.unit = unit;
+		this.city = city;
+		this.state = state;
+		this.zipCode = zipCode;
+	}
+
 	@Id
 	@Nullable
 	@JsonIgnore

@@ -3,10 +3,11 @@ package com.inthebytes.restaurantmanager.service;
 import javax.persistence.EntityExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
+import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
 import com.inthebytes.restaurantmanager.repository.RestaurantRepository;
 
 @Service
@@ -15,30 +16,20 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantRepository restaurantRepo;
 
-	public Restaurant createRestaurant(Restaurant restaurant) {
-		Restaurant stored;
+	@Autowired
+	private RestaurantMapper mapper;
 
-		try {
-			stored = restaurantRepo.findByName(restaurant.getName());
-		} catch (NullPointerException e) {
-			throw new IllegalArgumentException();
-		}
-
-		if (stored != null)
+	public RestaurantDTO createRestaurant(RestaurantDTO restaurant) {
+		if (restaurantRepo.findByName(restaurant.getName()) != null)
 			throw new EntityExistsException();
-
-		try {
-			return restaurantRepo.save(restaurant);
-		} catch (DataIntegrityViolationException e) {
-			throw new IllegalArgumentException();
-		}
+		return mapper.convert(restaurantRepo.save(mapper.convert(restaurant)));
 	}
 
-		public Boolean deleteRestaurant(Long restaurantId) {
-			Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
-			if (restaurant == null)
-				return false;
-			restaurantRepo.delete(restaurant);
-			return true;
-		}
+	public Boolean deleteRestaurant(Long restaurantId) {
+		Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
+		if (restaurant == null)
+			return false;
+		restaurantRepo.delete(restaurant);
+		return true;
 	}
+}

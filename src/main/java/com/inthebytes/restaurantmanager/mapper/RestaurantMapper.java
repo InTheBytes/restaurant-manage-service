@@ -3,8 +3,6 @@ package com.inthebytes.restaurantmanager.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xmlunit.util.Mapper;
-
 import com.inthebytes.restaurantmanager.dto.FoodDTO;
 import com.inthebytes.restaurantmanager.dto.LocationDTO;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
@@ -13,7 +11,7 @@ import com.inthebytes.restaurantmanager.entity.Location;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 
 
-public interface RestaurantMapper extends Mapper<RestaurantDTO, Restaurant> {
+public interface RestaurantMapper {
 	
 	public default Restaurant convert(RestaurantDTO dto) {
 		Restaurant entity = new Restaurant();
@@ -36,12 +34,12 @@ public interface RestaurantMapper extends Mapper<RestaurantDTO, Restaurant> {
 	}
 	
 	public default RestaurantDTO convert(Restaurant entity) {
-		RestaurantDTO dto = new RestaurantDTO();
+		RestaurantDTO dto = new RestaurantDTO(
+				entity.getName(), 
+				entity.getCuisine(), 
+				convert(entity.getLocation()));
 		
 		dto.setRestaurantId(entity.getRestaurantId());
-		dto.setName(entity.getName());
-		dto.setCuisine(entity.getCuisine());
-		dto.setLocation(convert(entity.getLocation()));
 		
 		List<FoodDTO> foods = new ArrayList<FoodDTO>();
 		for (Food food : entity.getFoods()) {
@@ -69,14 +67,14 @@ public interface RestaurantMapper extends Mapper<RestaurantDTO, Restaurant> {
 	}
 	
 	public default LocationDTO convert(Location entity) {
-		LocationDTO dto = new LocationDTO();
+		LocationDTO dto = new LocationDTO(
+				entity.getStreet(), 
+				entity.getUnit(), 
+				entity.getCity(), 
+				entity.getState(), 
+				entity.getZipCode());
 		
 		dto.setLocationId(entity.getLocationId());
-		dto.setUnit(entity.getUnit());
-		dto.setStreet(entity.getStreet());
-		dto.setCity(entity.getCity());
-		dto.setState(entity.getState());
-		dto.setZipCode(entity.getZipCode());
 		
 		return dto;
 	}
@@ -94,12 +92,12 @@ public interface RestaurantMapper extends Mapper<RestaurantDTO, Restaurant> {
 	}
 	
 	public default FoodDTO convert(Food entity) {
-		FoodDTO dto = new FoodDTO();
+		FoodDTO dto = new FoodDTO(
+				entity.getName(), 
+				entity.getPrice(), 
+				entity.getDescription());
 		
 		dto.setFoodId(entity.getFoodId());
-		dto.setName(entity.getName());
-		dto.setDescription(entity.getDescription());
-		dto.setPrice(entity.getPrice());
 		
 		return dto;
 	}

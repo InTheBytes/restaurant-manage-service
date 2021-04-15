@@ -77,11 +77,6 @@ public class Restaurant implements Serializable {
 	}
 
 	public void setFoods(List<Food> foods) {
-		if (foods != null && foods.size() != 0) {
-			for (Food food : foods) {
-				food.setRestaurant(this);
-			}
-		}
 		this.foods = foods;
 	}
 

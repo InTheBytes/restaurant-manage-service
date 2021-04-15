@@ -8,6 +8,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class FoodDTO {
 	
+	public FoodDTO(String name, Double price, String description) {
+		super();
+		this.name = name;
+		this.price = price;
+		this.description = description;
+	}
+
 	@Id
 	@Nullable
 	@JsonIgnore

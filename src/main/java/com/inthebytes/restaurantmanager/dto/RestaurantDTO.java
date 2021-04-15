@@ -9,6 +9,13 @@ import org.springframework.lang.Nullable;
 
 public class RestaurantDTO {
 	
+	public RestaurantDTO(String name, String cuisine, LocationDTO location) {
+		super();
+		this.name = name;
+		this.cuisine = cuisine;
+		this.location = location;
+	}
+
 	@Id
 	@Nullable
 	private Long restaurantId;

@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,8 +19,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inthebytes.restaurantmanager.entity.Location;
-import com.inthebytes.restaurantmanager.entity.Restaurant;
+import com.inthebytes.restaurantmanager.dto.LocationDTO;
+import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 
 import com.inthebytes.restaurantmanager.service.RestaurantService;
 
@@ -27,18 +28,19 @@ import com.inthebytes.restaurantmanager.service.RestaurantService;
 @AutoConfigureMockMvc
 public class RestaurantControllerTest {
 
-	@Autowired
-	private MockMvc mock;
-
 	@MockBean
 	private RestaurantService service;
+	
+	@Autowired
+	private MockMvc mock;
 
 
 	@Test
 	public void createRestaurantTest() throws JsonProcessingException, Exception {
-		Restaurant restaurant = makeRestaurantModel();
-		Restaurant result = restaurant;
+		RestaurantDTO restaurant = makeRestaurantModel();
+		RestaurantDTO result = makeRestaurantModel();
 		result.setRestaurantId(22L);
+		
 		when(service.createRestaurant(restaurant)).thenReturn(result);
 
 		mock.perform(post("/apis/restaurant")
@@ -49,19 +51,9 @@ public class RestaurantControllerTest {
 	}
 
 	@Test
-	public void createInvalidRestaurantTest() throws JsonProcessingException, Exception {
-		Restaurant restaurant = makeRestaurantModel();
-		when(service.createRestaurant(restaurant)).thenThrow(new IllegalArgumentException());
-
-		mock.perform(post("/apis/restaurant")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(restaurant)))
-		.andExpect(MockMvcResultMatchers.status().isNotAcceptable());
-	}
-
-	@Test
 	public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
-		Restaurant restaurant = makeRestaurantModel();
+		RestaurantDTO restaurant = makeRestaurantModel();
+		
 		when(service.createRestaurant(restaurant)).thenThrow(new EntityExistsException());
 
 		mock.perform(post("/apis/restaurant")
@@ -87,19 +79,9 @@ public class RestaurantControllerTest {
 		.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 	
-	private Restaurant makeRestaurantModel() {
-		Restaurant test = new Restaurant();
-		test.setName("Lexi's Burgers");
-
-		Location location = new Location();
-		location.setStreet("Main St.");
-		location.setUnit("123");
-		location.setCity("Sacramento");
-		location.setState("California");
-		location.setZipCode(95838);
-		test.setLocation(location);
-
-		test.setCuisine("Fast Food");
+	private RestaurantDTO makeRestaurantModel() {
+		LocationDTO location = new LocationDTO("Main St.", "123", "Sacramento", "California", 11111);
+		RestaurantDTO test = new RestaurantDTO("Lexi's Burgers", "Fast Food", location);
 
 		return test;
 	}
