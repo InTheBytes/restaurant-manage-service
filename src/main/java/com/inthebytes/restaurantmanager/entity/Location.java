@@ -141,4 +141,10 @@ public class Location implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Location [street=" + street + ", unit=" + unit + ", city=" + city + ", state=" + state + ", zipCode="
+				+ zipCode + "]";
+	}
 }

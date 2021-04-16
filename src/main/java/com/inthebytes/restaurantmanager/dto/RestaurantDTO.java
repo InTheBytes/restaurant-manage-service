@@ -76,10 +76,6 @@ public class RestaurantDTO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cuisine == null) ? 0 : cuisine.hashCode());
-		result = prime * result + ((foods == null) ? 0 : foods.hashCode());
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((restaurantId == null) ? 0 : restaurantId.hashCode());
 		return result;
 	}
@@ -93,31 +89,17 @@ public class RestaurantDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		RestaurantDTO other = (RestaurantDTO) obj;
-		if (cuisine == null) {
-			if (other.cuisine != null)
-				return false;
-		} else if (!cuisine.equals(other.cuisine))
-			return false;
-		if (foods == null) {
-			if (other.foods != null)
-				return false;
-		} else if (!foods.equals(other.foods))
-			return false;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
 		if (restaurantId == null) {
 			if (other.restaurantId != null)
 				return false;
 		} else if (!restaurantId.equals(other.restaurantId))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "RestaurantDTO [name=" + name + ", cuisine=" + cuisine + ", location=" + location + ", foods=" + foods
+				+ "]";
 	}
 }

@@ -132,4 +132,10 @@ public class Restaurant implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Restaurant [location=" + location + ", name=" + name + ", cuisine=" + cuisine + ", foods=" + foods
+				+ "]";
+	}
 }

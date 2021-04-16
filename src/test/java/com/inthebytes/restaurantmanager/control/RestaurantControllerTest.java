@@ -38,11 +38,9 @@ public class RestaurantControllerTest {
 		RestaurantDTO restaurant = makeRestaurantModel();
 		RestaurantDTO result = makeRestaurantModel();
 		result.setRestaurantId(22L);
-		System.out.println("\n\n\n\n\n\n\n"+result.getRestaurantId()+"\n\n\n\n\n\n");
-		//WHY DON'T YOU WORK?!?!?!?!
+
 		when(service.createRestaurant(restaurant)).thenReturn(result);
 
-		System.out.println("after " + service.createRestaurant(restaurant).getName() + service.createRestaurant(restaurant).getRestaurantId());
 		mock.perform(post("/apis/restaurant")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
@@ -54,7 +52,6 @@ public class RestaurantControllerTest {
 	public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
 		RestaurantDTO restaurant = makeRestaurantModel();
 		
-		//WHY DON'T YOU WORK?!?!?!?!
 		when(service.createRestaurant(restaurant)).thenThrow(new EntityExistsException());
 
 		mock.perform(post("/apis/restaurant")
