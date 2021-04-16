@@ -5,13 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,7 +18,6 @@ import com.inthebytes.restaurantmanager.entity.Location;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,18 +25,12 @@ public class RestaurantMapperTest {
 	
 	@Autowired
 	RestaurantMapper mapper;
-	
-//	@Before 
-//    void init(){
-//        mapper = new RestaurantMapper();
-//    }
 
 	@Test
 	public void restaurantEntityToDtoTest() {
 		Restaurant tester = makeRestaurantEntity();
 		RestaurantDTO result = makeRestaurantDTO();
 		
-		System.out.println("\n\n\n\n\n\n\n"+mapper.toString());
 		assertEquals(mapper.convert(tester).toString(), result.toString());
 	}
 	
