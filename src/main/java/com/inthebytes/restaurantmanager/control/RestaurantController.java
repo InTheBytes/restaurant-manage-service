@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ import com.inthebytes.restaurantmanager.service.RestaurantService;
 
 @RestController
 @RequestMapping("/apis/restaurant")
+@CrossOrigin("http://localhost:4200")
 public class RestaurantController {
 
 	@Autowired
