@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityExistsException;
 
 import static org.junit.Assert.assertFalse;
@@ -36,6 +39,26 @@ public class RestaurantServiceTest {
 
 	@InjectMocks
 	RestaurantService service;
+	
+	@Test
+	public void getRestaurantTest() {
+	}
+	
+	@Test
+	public void getRestaurantWithIdTest() {
+	}
+	
+	@Test
+	public void getRestaurantWithIdNotFoundTest() {
+	}
+	
+	@Test
+	public void updateRestaurantTest() {
+	}
+	
+	@Test
+	public void updateRestaurantNotFoundTest() {
+	}
 
 	@Test
 	public void createRestaurantTest() throws JsonProcessingException, Exception {

@@ -1,5 +1,8 @@
 package com.inthebytes.restaurantmanager.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +34,27 @@ public class RestaurantService {
 			return false;
 		restaurantRepo.delete(restaurant);
 		return true;
+	}
+
+	public List<RestaurantDTO> getRestaurant() {
+		return restaurantRepo.findAll().stream().map((x) -> mapper.convert(x)).collect(Collectors.toList());
+	}
+	
+	public RestaurantDTO getRestaurant(Long restuarantId) {
+		Restaurant restaurant = restaurantRepo.findByRestaurantId(restuarantId);
+		if (restaurant == null)
+			return null;
+		else
+			return mapper.convert(restaurant);
+	}
+	
+	public RestaurantDTO updateRestaurant(RestaurantDTO restaurant) {
+		Restaurant restaurantEntity = restaurantRepo.findByRestaurantId(restaurant.getRestaurantId());
+		if (restaurantEntity == null)
+			return null;
+		else {
+			restaurantEntity = mapper.convert(restaurant);
+			return mapper.convert(restaurantRepo.save(restaurantEntity));
+		}
 	}
 }
