@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,22 +43,79 @@ public class RestaurantServiceTest {
 	
 	@Test
 	public void getRestaurantTest() {
+		MockitoAnnotations.initMocks(this);
+		Restaurant ent1 = makeRestaurantEntity();
+		Restaurant ent2 = makeRestaurantEntity();
+		RestaurantDTO dto1 = makeRestaurantDTO();
+		RestaurantDTO dto2 = makeRestaurantDTO();
+		List<Restaurant> restaurants = new ArrayList<Restaurant>();
+		restaurants.add(ent1);
+		restaurants.add(ent2);
+		
+		when(repo.findAll()).thenReturn(restaurants);
+		when(mapper.convert(ent1)).thenReturn(dto1);
+		when(mapper.convert(ent2)).thenReturn(dto2);
+		
+		List<RestaurantDTO> results = service.getRestaurant();
+		assertThat(dto1).isIn(results);
+		assertThat(dto2).isIn(results);
+	}
+	
+	@Test
+	public void getRestaurantEmptyTest() {
+		MockitoAnnotations.initMocks(this);
+		when(repo.findAll()).thenReturn(new ArrayList<Restaurant>());
+		
+		List<RestaurantDTO> results = service.getRestaurant();
+		assertThat(results).hasSize(0);
 	}
 	
 	@Test
 	public void getRestaurantWithIdTest() {
+		MockitoAnnotations.initMocks(this);
+		Restaurant entity = makeRestaurantEntity();
+		RestaurantDTO dto = makeRestaurantDTO();
+		
+		when(repo.findByRestaurantId(22L)).thenReturn(entity);
+		when(mapper.convert(entity)).thenReturn(dto);
+		RestaurantDTO result = service.getRestaurant(22L);
+		assertThat(result).isEqualTo(dto);
 	}
 	
 	@Test
 	public void getRestaurantWithIdNotFoundTest() {
+		MockitoAnnotations.initMocks(this);
+		when(repo.findByRestaurantId(22L)).thenReturn(null);
+		
+		RestaurantDTO result = service.getRestaurant(22L);
+		assertThat(result).isNull();
 	}
 	
 	@Test
 	public void updateRestaurantTest() {
+		MockitoAnnotations.initMocks(this);
+		RestaurantDTO submission = makeRestaurantDTO();
+		Restaurant entity = makeRestaurantEntity();
+		submission.setRestaurantId(22L);
+		
+		when(repo.findByRestaurantId(22L)).thenReturn(entity);
+		when(repo.save(entity)).thenReturn(entity);
+		when(mapper.convert(submission)).thenReturn(entity);
+		when(mapper.convert(entity)).thenReturn(submission);
+		
+		RestaurantDTO result = service.updateRestaurant(submission);
+		assertThat(result).isEqualTo(submission);
 	}
 	
 	@Test
 	public void updateRestaurantNotFoundTest() {
+		MockitoAnnotations.initMocks(this);
+		RestaurantDTO submission = makeRestaurantDTO();
+		submission.setRestaurantId(22L);
+		when(repo.findByRestaurantId(22L)).thenReturn(null);
+		
+		RestaurantDTO result = service.updateRestaurant(submission);
+		assertThat(result).isNull();
 	}
 
 	@Test

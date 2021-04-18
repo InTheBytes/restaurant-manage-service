@@ -2,13 +2,20 @@ package com.inthebytes.restaurantmanager.control;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -44,33 +51,87 @@ public class RestaurantControllerTest {
 	MockMvc mock;
 	
 	@Test
-	public void getAllRestaurantsTest() {
+	public void getAllRestaurantsTest() throws Exception {
+		RestaurantDTO rest1 = makeRestaurantModel();
+		RestaurantDTO rest2 = makeRestaurantModel();
+		rest2.setName("A different one");
+		List<RestaurantDTO> restaurants = new ArrayList<RestaurantDTO>();
+		restaurants.add(rest1);
+		restaurants.add(rest2);
 		
+		when(service.getRestaurant()).thenReturn(restaurants);
+		
+		mock.perform(get("/apis/restaurant")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(jsonPath("$", hasSize(2)));
 	}
 	
 	@Test
-	public void getAllRestaurantsEmptyTest() {
+	public void getAllRestaurantsEmptyTest() throws Exception {
+		when(service.getRestaurant()).thenReturn(new ArrayList<RestaurantDTO>());
 		
+		mock.perform(get("/apis/restaurant")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNoContent());
 	}
 	
 	@Test
-	public void getRestaurantTest() {
+	public void getAllRestaurantsNullTest() throws Exception {
+		when(service.getRestaurant()).thenReturn(null);
 		
+		mock.perform(get("/apis/restaurant")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNoContent());
 	}
 	
 	@Test
-	public void getRestaurantNotFoundTest() {
+	public void getRestaurantTest() throws Exception {
+		RestaurantDTO result = makeRestaurantModel();
+		result.setRestaurantId(22L);
+		when(service.getRestaurant(22L)).thenReturn(result);
 		
+		mock.perform(get("/apis/restaurant/22")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.name").value(result.getName()));
 	}
 	
 	@Test
-	public void updateRestaurantTest() {
+	public void getRestaurantNotFoundTest() throws Exception {
+		when(service.getRestaurant(22L)).thenReturn(null);
 		
+		mock.perform(get("/apis/restaurant/22")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNotFound());
 	}
 	
 	@Test
-	public void updateRestaurantNotFoundTest() {
+	public void updateRestaurantTest() throws Exception {
+		RestaurantDTO submission = makeRestaurantModel();
+		RestaurantDTO result = makeRestaurantModel();
+		RestaurantDTO transit = makeRestaurantModel();
+		transit.setRestaurantId(22L);
+		result.setRestaurantId(22L);
 		
+		when(service.updateRestaurant(transit)).thenReturn(result);
+		
+		mock.perform(put("/apis/restaurant/22")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(submission)))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.restaurantId").value(22L));
+	}
+	
+	@Test
+	public void updateRestaurantNotFoundTest() throws JsonProcessingException, Exception {
+		RestaurantDTO submission = makeRestaurantModel();
+		when(service.updateRestaurant(submission)).thenReturn(null);
+		
+		mock.perform(put("/apis/restaurant/22")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(submission)))
+		.andExpect(status().isNotFound());
 	}
 
 	@Test
