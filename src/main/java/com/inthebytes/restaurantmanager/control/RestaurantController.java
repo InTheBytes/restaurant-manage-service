@@ -42,6 +42,12 @@ public class RestaurantController {
 			return ResponseEntity.ok().body(restaurants);
 	}
 	
+	@GetMapping(value = "/name/{name}")
+	public ResponseEntity<RestaurantDTO> getRestaurantByName(@PathVariable("name") String name) {
+		RestaurantDTO result = service.getRestaurant(name);
+		return (result == null) ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok().body(result);
+	}
+	
 	@GetMapping(value = "/{restaurantId}")
 	public ResponseEntity<RestaurantDTO> getRestaurant(@PathVariable("restaurantId") Long restaurantId) {
 		RestaurantDTO result = service.getRestaurant(restaurantId);

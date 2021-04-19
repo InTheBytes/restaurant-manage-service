@@ -86,6 +86,27 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
+	public void getRestaurantByNameTest() throws Exception {
+		RestaurantDTO result = makeRestaurantModel();
+		result.setName("test");
+		when(service.getRestaurant("test")).thenReturn(result);
+		
+		mock.perform(get("/apis/restaurant/name/test")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.name").value(result.getName()));
+	}
+	
+	@Test
+	public void getRestaurantByNameNotFoundTest() throws Exception {
+		when(service.getRestaurant("test")).thenReturn(null);
+		
+		mock.perform(get("/apis/restaurant/name/test")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
 	public void getRestaurantTest() throws Exception {
 		RestaurantDTO result = makeRestaurantModel();
 		result.setRestaurantId(22L);

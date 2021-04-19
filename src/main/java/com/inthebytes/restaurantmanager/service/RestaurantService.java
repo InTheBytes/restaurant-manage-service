@@ -40,6 +40,15 @@ public class RestaurantService {
 		return restaurantRepo.findAll().stream().map((x) -> mapper.convert(x)).collect(Collectors.toList());
 	}
 	
+
+	public RestaurantDTO getRestaurant(String name) {
+		Restaurant restaurant = restaurantRepo.findByName(name);
+		if (restaurant == null)
+			return null;
+		else
+			return mapper.convert(restaurant);
+	}
+	
 	public RestaurantDTO getRestaurant(Long restuarantId) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restuarantId);
 		if (restaurant == null)
