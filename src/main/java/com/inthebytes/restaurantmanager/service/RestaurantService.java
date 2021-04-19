@@ -41,12 +41,12 @@ public class RestaurantService {
 	}
 	
 
-	public List<RestaurantDTO> getRestaurant(String name) {
-		List<Restaurant> restaurant = restaurantRepo.findAllByName(name);
-		if (restaurant == null || restaurant.size() == 0)
+	public RestaurantDTO getRestaurant(String name) {
+		Restaurant restaurant = restaurantRepo.findByName(name);
+		if (restaurant == null)
 			return null;
 		else
-			return restaurant.stream().map((x) -> mapper.convert(x)).collect(Collectors.toList());
+			return mapper.convert(restaurant);
 	}
 	
 	public RestaurantDTO getRestaurant(Long restuarantId) {

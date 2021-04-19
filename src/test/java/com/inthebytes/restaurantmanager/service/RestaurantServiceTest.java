@@ -94,29 +94,23 @@ public class RestaurantServiceTest {
 	@Test
 	public void getRestaurantWithNameTest() {
 		MockitoAnnotations.initMocks(this);
-		List<Restaurant> results = new ArrayList<Restaurant>();
-		List<RestaurantDTO> converted = new ArrayList<RestaurantDTO>();
-		
 		Restaurant entity = makeRestaurantEntity();
 		RestaurantDTO dto = makeRestaurantDTO();
 		dto.setName("test");
 		entity.setName("test");
-		results.add(entity);
-		converted.add(dto);
 		
-		when(repo.findAllByName("test")).thenReturn(results);
+		when(repo.findByName("test")).thenReturn(entity);
 		when(mapper.convert(entity)).thenReturn(dto);
-		List<RestaurantDTO> result = service.getRestaurant("test");
-		assertThat(result).contains(dto);
-		assertThat(result).hasSize(1);
+		RestaurantDTO result = service.getRestaurant("test");
+		assertThat(result).isEqualTo(dto);
 	}
 	
 	@Test
 	public void getRestaurantWithNameNotFoundTest() {
 		MockitoAnnotations.initMocks(this);
-		when(repo.findAllByName("test")).thenReturn(null);
+		when(repo.findByName("test")).thenReturn(null);
 		
-		List<RestaurantDTO> result = service.getRestaurant("test");
+		RestaurantDTO result = service.getRestaurant("test");
 		assertThat(result).isNull();
 	}
 	

@@ -87,16 +87,14 @@ public class RestaurantControllerTest {
 	
 	@Test
 	public void getRestaurantByNameTest() throws Exception {
-		List<RestaurantDTO> results = new ArrayList<RestaurantDTO>();
-		RestaurantDTO test = makeRestaurantModel();
-		test.setName("test");
-		results.add(test);
-		when(service.getRestaurant("test")).thenReturn(results);
+		RestaurantDTO result = makeRestaurantModel();
+		result.setName("test");
+		when(service.getRestaurant("test")).thenReturn(result);
 		
 		mock.perform(get("/apis/restaurant/name/test")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$", hasSize(1)));
+		.andExpect(jsonPath("$.name").value(result.getName()));
 	}
 	
 	@Test
