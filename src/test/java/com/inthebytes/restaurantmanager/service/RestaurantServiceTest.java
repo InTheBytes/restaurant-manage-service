@@ -71,6 +71,32 @@ public class RestaurantServiceTest {
 	}
 	
 	@Test
+	public void getRestaurantPagesTest() {
+		MockitoAnnotations.initMocks(this);
+		Restaurant ent1 = makeRestaurantEntity();
+		Restaurant ent2 = makeRestaurantEntity();
+		RestaurantDTO dto1 = makeRestaurantDTO();
+		RestaurantDTO dto2 = makeRestaurantDTO();
+//		LocationDTO location = new LocationDTO("Main St.", "123", "Sacramento", "California", 11111);
+//		RestaurantDTO dto2 = new RestaurantDTO("Second Test", "Fast Food", location);
+		List<Restaurant> restaurants = new ArrayList<Restaurant>();
+		ent2.setName("SecondTest");
+		dto2.setName("SecondTest");
+		dto2.setRestaurantId(33L);
+		
+		restaurants.add(ent1);
+		restaurants.add(ent2);
+		when(repo.findAll()).thenReturn(restaurants);
+		when(mapper.convert(ent1)).thenReturn(dto1);
+		when(mapper.convert(ent2)).thenReturn(dto2);
+		
+		List<List<RestaurantDTO>> resultPages = service.getRestaurantPages(1);
+		assertThat(resultPages).hasSize(2);
+		assertThat(resultPages.get(0)).hasSize(1);
+		assertThat(resultPages.get(0)).hasSize(1);
+	}
+	
+	@Test
 	public void getRestaurantWithIdTest() {
 		MockitoAnnotations.initMocks(this);
 		Restaurant entity = makeRestaurantEntity();
