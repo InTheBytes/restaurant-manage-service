@@ -45,9 +45,7 @@ public class RestaurantService {
 	
 	public List<List<RestaurantDTO>> getRestaurantPages(Integer pageSize) {
 		List<RestaurantDTO> manuscript = getRestaurant();
-		
 		Map<Integer, List<RestaurantDTO>> pages = manuscript.stream().collect(Collectors.groupingBy(x -> manuscript.indexOf(x)/pageSize));
-		System.out.println(manuscript.toString()+"\n"+pages.toString());
 		List<List<RestaurantDTO>> paginated = new ArrayList<List<RestaurantDTO>>(pages.values());
 		return paginated;
 	}
