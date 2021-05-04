@@ -51,7 +51,7 @@ public class RestaurantControllerTest {
 	MockMvc mock;
 	
 	@Test
-	public void getAllRestaurantsTest() throws Exception {
+	public void getRestaurantsTest() throws Exception {
 		RestaurantDTO rest1 = makeRestaurantModel();
 		RestaurantDTO rest2 = makeRestaurantModel();
 		rest2.setName("A different one");
@@ -68,7 +68,7 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void getAllRestaurantsEmptyTest() throws Exception {
+	public void getRestaurantsEmptyTest() throws Exception {
 		when(service.getRestaurant()).thenReturn(new ArrayList<RestaurantDTO>());
 		
 		mock.perform(get("/apis/restaurant")
@@ -77,13 +77,15 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void getAllRestaurantsNullTest() throws Exception {
+	public void getRestaurantsNullTest() throws Exception {
 		when(service.getRestaurant()).thenReturn(null);
 		
 		mock.perform(get("/apis/restaurant")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNoContent());
 	}
+	
+	// refactor tests above ^
 	
 	@Test
 	public void getRestaurantByNameTest() throws Exception {

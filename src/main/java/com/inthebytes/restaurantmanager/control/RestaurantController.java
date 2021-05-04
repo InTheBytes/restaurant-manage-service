@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
@@ -34,12 +35,19 @@ public class RestaurantController {
 	RestaurantService service;
 	
 	@GetMapping(value = "")
-	public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
-		List<RestaurantDTO> restaurants = service.getRestaurant();
+	public ResponseEntity<List<RestaurantDTO>> getRestaurants(
+			@RequestParam(value = "page-size") Integer pageSize,
+			@RequestParam(value = "page") Integer pageNum) {
+		List<List<RestaurantDTO>> restaurants = service.getRestaurantPages(pageSize);
 		if (restaurants == null || restaurants.size() == 0)
 			return ResponseEntity.noContent().build();
-		else
-			return ResponseEntity.ok().body(restaurants);
+		else {
+			HttpHeaders headers = new HttpHeaders();
+			headers.set("page", Integer.toString(pageNum));
+			headers.set("total-pages", Integer.toString(restaurants.size()));
+			return ResponseEntity.ok().headers(headers).body(restaurants.get(pageNum-1));
+		}
+			
 	}
 	
 	@GetMapping(value = "/name/{name}")
