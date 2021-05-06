@@ -45,6 +45,7 @@ public class RestaurantController {
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("page", Integer.toString(pageNum));
 			headers.set("total-pages", Integer.toString(restaurants.size()));
+			headers.set("Access-Control-Expose-Headers", "page, total-pages");
 			return ResponseEntity.ok().headers(headers).body(restaurants.get(pageNum-1));
 		}
 			
