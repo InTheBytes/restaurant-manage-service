@@ -51,52 +51,58 @@ public class RestaurantControllerTest {
 	MockMvc mock;
 	
 	@Test
-	public void getAllRestaurantsTest() throws Exception {
+	public void getRestaurantsTest() throws Exception {
 		RestaurantDTO rest1 = makeRestaurantModel();
 		RestaurantDTO rest2 = makeRestaurantModel();
 		rest2.setName("A different one");
-		List<RestaurantDTO> restaurants = new ArrayList<RestaurantDTO>();
-		restaurants.add(rest1);
-		restaurants.add(rest2);
+		rest2.setRestaurantId(30L);
+		List<RestaurantDTO> restaurants1 = new ArrayList<RestaurantDTO>();
+		restaurants1.add(rest1);
+		List<RestaurantDTO> restaurants2 = new ArrayList<RestaurantDTO>();
+		restaurants2.add(rest2);
 		
-		when(service.getRestaurant()).thenReturn(restaurants);
+		List<List<RestaurantDTO>> restaurants = new ArrayList<List<RestaurantDTO>>();
+		restaurants.add(restaurants1);
+		restaurants.add(restaurants2);
 		
-		mock.perform(get("/apis/restaurant")
+		when(service.getRestaurantPages(1)).thenReturn(restaurants);
+		
+		mock.perform(get("/apis/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(jsonPath("$", hasSize(2)));
+		.andExpect(jsonPath("$", hasSize(1)))
+		.andExpect(MockMvcResultMatchers.header().string("page", Matchers.containsString("1")))
+		.andExpect(MockMvcResultMatchers.header().string("total-pages", Matchers.containsString("2")));
 	}
 	
 	@Test
-	public void getAllRestaurantsEmptyTest() throws Exception {
-		when(service.getRestaurant()).thenReturn(new ArrayList<RestaurantDTO>());
+	public void getRestaurantsEmptyTest() throws Exception {
+		when(service.getRestaurantPages(1)).thenReturn(new ArrayList<List<RestaurantDTO>>());
 		
-		mock.perform(get("/apis/restaurant")
+		mock.perform(get("/apis/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNoContent());
 	}
 	
 	@Test
-	public void getAllRestaurantsNullTest() throws Exception {
-		when(service.getRestaurant()).thenReturn(null);
+	public void getRestaurantsNullTest() throws Exception {
+		when(service.getRestaurantPages(1)).thenReturn(null);
 		
-		mock.perform(get("/apis/restaurant")
+		mock.perform(get("/apis/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNoContent());
 	}
 	
 	@Test
 	public void getRestaurantByNameTest() throws Exception {
-		List<RestaurantDTO> results = new ArrayList<RestaurantDTO>();
-		RestaurantDTO test = makeRestaurantModel();
-		test.setName("test");
-		results.add(test);
-		when(service.getRestaurant("test")).thenReturn(results);
+		RestaurantDTO result = makeRestaurantModel();
+		result.setName("test");
+		when(service.getRestaurant("test")).thenReturn(result);
 		
 		mock.perform(get("/apis/restaurant/name/test")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$", hasSize(1)));
+		.andExpect(jsonPath("$.name").value(result.getName()));
 	}
 	
 	@Test

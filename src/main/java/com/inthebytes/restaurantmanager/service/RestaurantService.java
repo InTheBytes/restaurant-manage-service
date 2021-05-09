@@ -1,6 +1,8 @@
 package com.inthebytes.restaurantmanager.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
@@ -40,13 +42,21 @@ public class RestaurantService {
 		return restaurantRepo.findAll().stream().map((x) -> mapper.convert(x)).collect(Collectors.toList());
 	}
 	
+	
+	public List<List<RestaurantDTO>> getRestaurantPages(Integer pageSize) {
+		List<RestaurantDTO> manuscript = getRestaurant();
+		Map<Integer, List<RestaurantDTO>> pages = manuscript.stream().collect(Collectors.groupingBy(x -> manuscript.indexOf(x)/pageSize));
+		List<List<RestaurantDTO>> paginated = new ArrayList<List<RestaurantDTO>>(pages.values());
+		return paginated;
+	}
+	
 
-	public List<RestaurantDTO> getRestaurant(String name) {
-		List<Restaurant> restaurant = restaurantRepo.findAllByName(name);
-		if (restaurant == null || restaurant.size() == 0)
+	public RestaurantDTO getRestaurant(String name) {
+		Restaurant restaurant = restaurantRepo.findByName(name);
+		if (restaurant == null)
 			return null;
 		else
-			return restaurant.stream().map((x) -> mapper.convert(x)).collect(Collectors.toList());
+			return mapper.convert(restaurant);
 	}
 	
 	public RestaurantDTO getRestaurant(Long restuarantId) {
