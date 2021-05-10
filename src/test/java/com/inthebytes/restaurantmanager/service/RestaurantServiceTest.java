@@ -25,7 +25,7 @@ import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Location;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
-import com.inthebytes.restaurantmanager.repository.RestaurantRepository;
+import com.inthebytes.restaurantmanager.repository.RestaurantDao;
 
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -33,7 +33,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class RestaurantServiceTest {
 
 	@Mock
-	RestaurantRepository repo;
+	RestaurantDao repo;
 	
 	@Mock
 	RestaurantMapper mapper;

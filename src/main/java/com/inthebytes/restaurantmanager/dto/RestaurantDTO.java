@@ -31,6 +31,9 @@ public class RestaurantDTO {
 
 	@Nullable
 	private List<FoodDTO> foods;
+	
+	@Nullable
+	private List<UserDto> managers;
 
 	public Long getRestaurantId() {
 		return restaurantId;
@@ -70,6 +73,14 @@ public class RestaurantDTO {
 
 	public void setFoods(List<FoodDTO> foods) {
 		this.foods = foods;
+	}
+
+	public List<UserDto> getManagers() {
+		return managers;
+	}
+
+	public void setManagers(List<UserDto> managers) {
+		this.managers = managers;
 	}
 
 	@Override
