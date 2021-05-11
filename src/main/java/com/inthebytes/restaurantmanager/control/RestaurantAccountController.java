@@ -1,5 +1,7 @@
 package com.inthebytes.restaurantmanager.control;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,7 +33,7 @@ public class RestaurantAccountController {
 	@PutMapping(value = "/{restaurantId}/managers")
 	public ResponseEntity<RestaurantDTO> addManager(
 			@PathVariable Long id, 
-			@RequestBody UserDto user) {
+			@Valid @RequestBody UserDto user) {
 		
 		RestaurantDTO restaurant = service.addManager(id, user);
 		return buildResponse(restaurant);
@@ -51,7 +53,7 @@ public class RestaurantAccountController {
 	@DeleteMapping(value = "/{restaurantId}/managers")
 	public ResponseEntity<RestaurantDTO> deleteManager(
 			@PathVariable Long id, 
-			@RequestBody UserDto user) {
+			@Valid @RequestBody UserDto user) {
 		
 		RestaurantDTO restaurant = service.removeManager(id, user);
 		return buildResponse(restaurant);
