@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.dto.UserDto;
-import com.inthebytes.restaurantmanager.service.RestaurantManagerService;
+import com.inthebytes.restaurantmanager.service.RestaurantAccountService;
 
 @RestController
 @RequestMapping("/apis/restaurants")
@@ -20,14 +20,21 @@ import com.inthebytes.restaurantmanager.service.RestaurantManagerService;
 public class RestaurantAccountController {
 	
 	@Autowired
-	private RestaurantManagerService service;
+	private RestaurantAccountService service;
+	
+	private ResponseEntity<RestaurantDTO> buildResponse(RestaurantDTO restaurant) {
+		if (restaurant == null)
+			return ResponseEntity.notFound().build();
+		return ResponseEntity.ok().body(restaurant);
+	}
 	
 	@PutMapping(value = "/{restaurantId}/managers")
 	public ResponseEntity<RestaurantDTO> addManager(
 			@PathVariable Long id, 
 			@RequestBody UserDto user) {
 		
-		return null;
+		RestaurantDTO restaurant = service.addManager(id, user);
+		return buildResponse(restaurant);
 	}
 	
 	
@@ -36,7 +43,8 @@ public class RestaurantAccountController {
 			@PathVariable("restaurantId") Long restaurantId,
 			@PathVariable("userId") Long userId) {
 		
-		return null;
+		RestaurantDTO restaurant = service.addManager(restaurantId, userId);
+		return buildResponse(restaurant);
 	}
 	
 	
@@ -44,7 +52,9 @@ public class RestaurantAccountController {
 	public ResponseEntity<RestaurantDTO> deleteManager(
 			@PathVariable Long id, 
 			@RequestBody UserDto user) {
-		return null;
+		
+		RestaurantDTO restaurant = service.removeManager(id, user);
+		return buildResponse(restaurant);
 	}
 	
 	
@@ -53,6 +63,7 @@ public class RestaurantAccountController {
 			@PathVariable("restaurantId") Long restaurantId,
 			@PathVariable("userId") Long userId) {
 		
-		return null;
+		RestaurantDTO restaurant = service.removeManager(restaurantId, userId);
+		return buildResponse(restaurant);
 	}
 }

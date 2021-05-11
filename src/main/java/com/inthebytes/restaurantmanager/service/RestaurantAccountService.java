@@ -13,7 +13,7 @@ import com.inthebytes.restaurantmanager.repository.RestaurantDao;
 import com.inthebytes.restaurantmanager.repository.RoleDao;
 import com.inthebytes.restaurantmanager.repository.UserDao;
 
-public class RestaurantManagerService {
+public class RestaurantAccountService {
 	
 	@Autowired
 	private RestaurantDao restaurantRepo;
