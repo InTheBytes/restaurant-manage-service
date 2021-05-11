@@ -1,6 +1,7 @@
 package com.inthebytes.restaurantmanager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.dto.UserDto;
@@ -13,6 +14,7 @@ import com.inthebytes.restaurantmanager.repository.RestaurantDao;
 import com.inthebytes.restaurantmanager.repository.RoleDao;
 import com.inthebytes.restaurantmanager.repository.UserDao;
 
+@Service
 public class RestaurantAccountService {
 	
 	@Autowired
