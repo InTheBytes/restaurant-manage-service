@@ -3,6 +3,7 @@ package com.inthebytes.restaurantmanager.control;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +26,8 @@ public class RestaurantAccountController {
 	private RestaurantAccountService service;
 	
 	private ResponseEntity<RestaurantDTO> buildResponse(RestaurantDTO restaurant) {
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.set("Access-Control-Allow-Origin", "http://localhost:4200");
 		if (restaurant == null)
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(restaurant);
@@ -32,7 +35,7 @@ public class RestaurantAccountController {
 	
 	@PutMapping(value = "/{restaurantId}/managers")
 	public ResponseEntity<RestaurantDTO> addManager(
-			@PathVariable Long id, 
+			@PathVariable("restaurantId") Long id, 
 			@Valid @RequestBody UserDto user) {
 		
 		RestaurantDTO restaurant = service.addManager(id, user);
