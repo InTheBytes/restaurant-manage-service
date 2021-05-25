@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
-import com.inthebytes.restaurantmanager.repository.RestaurantRepository;
+import com.inthebytes.restaurantmanager.repository.RestaurantDao;
 
 @Service
 public class RestaurantService {
 
 	@Autowired
-	private RestaurantRepository restaurantRepo;
+	private RestaurantDao restaurantRepo;
 
 	@Autowired
 	private RestaurantMapper mapper;

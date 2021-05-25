@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 
 @Repository
-public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
+public interface RestaurantDao extends JpaRepository<Restaurant, Long> {
 	Restaurant findByRestaurantId(Long id);
 	Restaurant findByName(String name);
 }

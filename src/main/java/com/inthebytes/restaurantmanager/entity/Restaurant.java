@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -38,6 +39,12 @@ public class Restaurant implements Serializable {
 
 	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Food> foods;
+	
+	@OneToMany
+	@JoinTable(name = "manager",
+			joinColumns = {@JoinColumn(name = "restaurant_id")},
+			inverseJoinColumns = {@JoinColumn(name = "user_id")})
+	private List<User> manager;
 
 	public Long getRestaurantId() {
 		return restaurantId;
@@ -77,6 +84,14 @@ public class Restaurant implements Serializable {
 
 	public void setFoods(List<Food> foods) {
 		this.foods = foods;
+	}
+
+	public List<User> getManager() {
+		return manager;
+	}
+
+	public void setManager(List<User> manager) {
+		this.manager = manager;
 	}
 
 	public static long getSerialversionuid() {

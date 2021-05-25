@@ -16,6 +16,7 @@ import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Food;
 import com.inthebytes.restaurantmanager.entity.Location;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
+import com.inthebytes.restaurantmanager.entity.User;
 
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -111,6 +112,9 @@ public class RestaurantMapperTest {
 		List<Food> foods = new ArrayList<Food>();
 		foods.add(food);
 		test.setFoods(foods);
+		
+		List<User> managers = new ArrayList<User>();
+		test.setManager(managers);
 
 		return test;
 	}
