@@ -26,8 +26,6 @@ public class RestaurantAccountController {
 	private RestaurantAccountService service;
 	
 	private ResponseEntity<RestaurantDTO> buildResponse(RestaurantDTO restaurant) {
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.set("Access-Control-Allow-Origin", "http://localhost:4200");
 		if (restaurant == null)
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(restaurant);
@@ -55,10 +53,10 @@ public class RestaurantAccountController {
 	
 	@DeleteMapping(value = "/{restaurantId}/managers")
 	public ResponseEntity<RestaurantDTO> deleteManager(
-			@PathVariable Long id, 
+			@PathVariable Long restaurantId, 
 			@Valid @RequestBody UserDto user) {
 		
-		RestaurantDTO restaurant = service.removeManager(id, user);
+		RestaurantDTO restaurant = service.removeManager(restaurantId, user);
 		return buildResponse(restaurant);
 	}
 	

@@ -44,7 +44,7 @@ public class RestaurantAccountService {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
 		User userEntity = userRepo.findByUsername(user.getUsername());
 		
-		if (userEntity == null)
+		if (userEntity == null || restaurant == null)
 			return null;
 		userEntity.setRole(findManagerRole());
 		userEntity.setActive(true);
@@ -65,7 +65,7 @@ public class RestaurantAccountService {
 	public RestaurantDTO removeManager(Long restaurantId, UserDto user) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
 		User userEntity = userRepo.findByUsername(user.getUsername());
-		if (userEntity == null)
+		if (userEntity == null || restaurant == null)
 			return null;
 		
 		userEntity.setActive(false);

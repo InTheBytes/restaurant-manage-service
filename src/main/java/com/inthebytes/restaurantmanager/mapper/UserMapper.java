@@ -11,6 +11,12 @@ import com.inthebytes.restaurantmanager.entity.User;
 public class UserMapper {
 	
 	public UserDto convert(User user) {
+		if (user == null ||
+				user.getUserId() == null ||
+				user.getUsername() == null ||
+				user.getRole() == null ||
+				user.getActive() == null)
+			return null;
 		UserDto result = new UserDto();
 		result.setUserId(user.getUserId());
 		result.setUsername(user.getUsername());
@@ -20,6 +26,10 @@ public class UserMapper {
 	}
 	
 	public RoleDto convert(Role role) {
+		if (role == null ||
+				role.getRoleId() == null ||
+				role.getName() == null)	
+			return null;
 		RoleDto result = new RoleDto();
 		result.setRoleId(role.getRoleId());
 		result.setName(role.getName());
