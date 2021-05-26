@@ -31,16 +31,16 @@ pipeline {
         stage('Dockerize') {
             steps {
                 script {
-                    docker.build('accountservice')
+                    docker.build('restaurantservice')
                 }
             }
         }
         stage('Push ECR') {
             steps {
                 script {
-                    docker.withRegistry('https://241465518750.dkr.ecr.us-east-2.amazonaws.com', 'ecr:us-east-2:aws-ecr-creds') {
-                        docker.image('accountservice').push("${env.BUILD_NUMBER}")
-                        docker.image('accountservice').push('latest')
+                    docker.withRegistry('241465518750.dkr.ecr.us-east-2.amazonaws.com', 'ecr:us-east-2:aws-ecr-creds') {
+                        docker.image('restaurantservice').push("${env.BUILD_NUMBER}")
+                        docker.image('restaurantservice').push('latest')
                     }
                 }
             }
