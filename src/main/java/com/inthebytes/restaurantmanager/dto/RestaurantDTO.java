@@ -18,7 +18,7 @@ public class RestaurantDTO {
 
 	@Id
 	@Nullable
-	private Long restaurantId;
+	private String restaurantId;
 
 	@NonNull
 	private String name;
@@ -35,11 +35,11 @@ public class RestaurantDTO {
 	@Nullable
 	private List<UserDto> managers;
 
-	public Long getRestaurantId() {
+	public String getRestaurantId() {
 		return restaurantId;
 	}
 
-	public void setRestaurantId(Long restaurantId) {
+	public void setRestaurantId(String restaurantId) {
 		this.restaurantId = restaurantId;
 	}
 

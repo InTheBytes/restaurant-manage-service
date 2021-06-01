@@ -21,7 +21,7 @@ public class Food implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "food_id")
-	private Long foodId;
+	private String foodId;
 	
 	@Column(name = "name")
 	private String name;
@@ -36,11 +36,11 @@ public class Food implements Serializable {
 	@JoinColumn(name = "restaurant_id", referencedColumnName = "restaurant_id")
 	private Restaurant restaurant;
 
-	public Long getFoodId() {
+	public String getFoodId() {
 		return foodId;
 	}
 
-	public void setFoodId(Long foodId) {
+	public void setFoodId(String foodId) {
 		this.foodId = foodId;
 	}
 

@@ -25,7 +25,7 @@ public class Restaurant implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "restaurant_id")
-	private Long restaurantId;
+	private String restaurantId;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "location_id")
@@ -46,11 +46,11 @@ public class Restaurant implements Serializable {
 			inverseJoinColumns = {@JoinColumn(name = "user_id")})
 	private List<User> manager;
 
-	public Long getRestaurantId() {
+	public String getRestaurantId() {
 		return restaurantId;
 	}
 
-	public void setRestaurantId(Long restaurantId) {
+	public void setRestaurantId(String restaurantId) {
 		this.restaurantId = restaurantId;
 	}
 

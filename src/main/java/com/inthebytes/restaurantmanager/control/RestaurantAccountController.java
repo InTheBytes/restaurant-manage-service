@@ -33,7 +33,7 @@ public class RestaurantAccountController {
 	
 	@PutMapping(value = "/{restaurantId}/managers")
 	public ResponseEntity<RestaurantDTO> addManager(
-			@PathVariable("restaurantId") Long id, 
+			@PathVariable("restaurantId") String id, 
 			@Valid @RequestBody UserDto user) {
 		
 		RestaurantDTO restaurant = service.addManager(id, user);
@@ -43,8 +43,8 @@ public class RestaurantAccountController {
 	
 	@PutMapping(value = "/{restaurantId}/managers/{userId}")
 	public ResponseEntity<RestaurantDTO> addManagerById(
-			@PathVariable("restaurantId") Long restaurantId,
-			@PathVariable("userId") Long userId) {
+			@PathVariable("restaurantId") String restaurantId,
+			@PathVariable("userId") String userId) {
 		
 		RestaurantDTO restaurant = service.addManager(restaurantId, userId);
 		return buildResponse(restaurant);
@@ -53,7 +53,7 @@ public class RestaurantAccountController {
 	
 	@DeleteMapping(value = "/{restaurantId}/managers")
 	public ResponseEntity<RestaurantDTO> deleteManager(
-			@PathVariable Long restaurantId, 
+			@PathVariable String restaurantId, 
 			@Valid @RequestBody UserDto user) {
 		
 		RestaurantDTO restaurant = service.removeManager(restaurantId, user);
@@ -63,8 +63,8 @@ public class RestaurantAccountController {
 	
 	@DeleteMapping(value = "/{restaurantId}/managers/{userId}")
 	public ResponseEntity<RestaurantDTO> deleteManagerById(
-			@PathVariable("restaurantId") Long restaurantId,
-			@PathVariable("userId") Long userId) {
+			@PathVariable("restaurantId") String restaurantId,
+			@PathVariable("userId") String userId) {
 		
 		RestaurantDTO restaurant = service.removeManager(restaurantId, userId);
 		return buildResponse(restaurant);

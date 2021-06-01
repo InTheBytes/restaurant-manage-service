@@ -48,11 +48,11 @@ public class RestaurantAccountControllerTest {
 	
 	private void makeUser() {
 		UserDto user = new UserDto();
-		user.setUserId(1L);
+		user.setUserId("1");
 		user.setUsername("TestUser");
 		user.setIsActive(true);
 		RoleDto role = new RoleDto();
-		role.setRoleId(1L);
+		role.setRoleId("1");
 		role.setName("test");
 		user.setRole(role);
 		manager = user;
@@ -62,7 +62,7 @@ public class RestaurantAccountControllerTest {
 		LocationDTO location = new LocationDTO("Test", "Test", "Test", "Test", 11111);
 		RestaurantDTO restaurant = new RestaurantDTO("Test", "Test", location);
 		restaurant.setFoods(new ArrayList<FoodDTO>());
-		restaurant.setRestaurantId((addManager) ? 1L : 2L);
+		restaurant.setRestaurantId((addManager) ? "1" : "2");
 		List<UserDto> managers = new ArrayList<UserDto>();
 		if (addManager)
 			managers.add(manager);
@@ -78,13 +78,13 @@ public class RestaurantAccountControllerTest {
 	
 	@Test
 	public void addManagerTest() throws Exception {
-		Mockito.when(service.addManager(1L, manager)).thenReturn(makeRestaurant(true));
+		Mockito.when(service.addManager("1", manager)).thenReturn(makeRestaurant(true));
 		
 		mock.perform(put("/apis/restaurants/1/managers")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(manager)))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(jsonPath("$.restaurantId").value(1L))
+		.andExpect(jsonPath("$.restaurantId").value("1"))
 		.andExpect(jsonPath("$.managers").isNotEmpty());
 	}
 	
@@ -99,13 +99,13 @@ public class RestaurantAccountControllerTest {
 	
 	@Test
 	public void addManagerByIdTest() throws Exception {
-		Mockito.when(service.addManager(1L, 1L)).thenReturn(makeRestaurant(true));
+		Mockito.when(service.addManager("1", "1")).thenReturn(makeRestaurant(true));
 		
 		mock.perform(put("/apis/restaurants/1/managers/1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(manager)))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(jsonPath("$.restaurantId").value(1L))
+		.andExpect(jsonPath("$.restaurantId").value("1"))
 		.andExpect(jsonPath("$.managers").isNotEmpty());
 	}
 	
@@ -119,13 +119,13 @@ public class RestaurantAccountControllerTest {
 	
 	@Test
 	public void deleteManagerTest() throws Exception {
-		Mockito.when(service.removeManager(2L, manager)).thenReturn(makeRestaurant(false));
+		Mockito.when(service.removeManager("2", manager)).thenReturn(makeRestaurant(false));
 		
 		mock.perform(delete("/apis/restaurants/2/managers")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(manager)))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(jsonPath("$.restaurantId").value(2L))
+		.andExpect(jsonPath("$.restaurantId").value("2"))
 		.andExpect(jsonPath("$.managers").isEmpty());
 	}
 	
@@ -140,12 +140,12 @@ public class RestaurantAccountControllerTest {
 	
 	@Test
 	public void deleteManagerByIdTest() throws Exception {
-		Mockito.when(service.removeManager(2L, 1L)).thenReturn(makeRestaurant(false));
+		Mockito.when(service.removeManager("2", "1")).thenReturn(makeRestaurant(false));
 		
 		mock.perform(delete("/apis/restaurants/2/managers/1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(jsonPath("$.restaurantId").value(2L))
+		.andExpect(jsonPath("$.restaurantId").value("2"))
 		.andExpect(jsonPath("$.managers").isEmpty());
 	}
 	

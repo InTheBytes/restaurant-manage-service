@@ -82,7 +82,7 @@ public class RestaurantServiceTest {
 		List<Restaurant> restaurants = new ArrayList<Restaurant>();
 		ent2.setName("SecondTest");
 		dto2.setName("SecondTest");
-		dto2.setRestaurantId(33L);
+		dto2.setRestaurantId("33");
 		
 		restaurants.add(ent1);
 		restaurants.add(ent2);
@@ -102,18 +102,18 @@ public class RestaurantServiceTest {
 		Restaurant entity = makeRestaurantEntity();
 		RestaurantDTO dto = makeRestaurantDTO();
 		
-		when(repo.findByRestaurantId(22L)).thenReturn(entity);
+		when(repo.findByRestaurantId("22")).thenReturn(entity);
 		when(mapper.convert(entity)).thenReturn(dto);
-		RestaurantDTO result = service.getRestaurant(22L);
+		RestaurantDTO result = service.getRestaurant("22");
 		assertThat(result).isEqualTo(dto);
 	}
 	
 	@Test
 	public void getRestaurantWithIdNotFoundTest() {
 		MockitoAnnotations.initMocks(this);
-		when(repo.findByRestaurantId(22L)).thenReturn(null);
+		when(repo.findByRestaurantId("22")).thenReturn(null);
 		
-		RestaurantDTO result = service.getRestaurant(22L);
+		RestaurantDTO result = service.getRestaurant("22");
 		assertThat(result).isNull();
 	}
 	
@@ -127,7 +127,7 @@ public class RestaurantServiceTest {
 		
 		when(repo.findByName("test")).thenReturn(entity);
 		when(mapper.convert(entity)).thenReturn(dto);
-		RestaurantDTO result = service.getRestaurant("test");
+		RestaurantDTO result = service.getRestaurantByName("test");
 		assertThat(result).isEqualTo(dto);
 	}
 	
@@ -136,7 +136,7 @@ public class RestaurantServiceTest {
 		MockitoAnnotations.initMocks(this);
 		when(repo.findByName("test")).thenReturn(null);
 		
-		RestaurantDTO result = service.getRestaurant("test");
+		RestaurantDTO result = service.getRestaurantByName("test");
 		assertThat(result).isNull();
 	}
 	
@@ -145,9 +145,9 @@ public class RestaurantServiceTest {
 		MockitoAnnotations.initMocks(this);
 		RestaurantDTO submission = makeRestaurantDTO();
 		Restaurant entity = makeRestaurantEntity();
-		submission.setRestaurantId(22L);
+		submission.setRestaurantId("22");
 		
-		when(repo.findByRestaurantId(22L)).thenReturn(entity);
+		when(repo.findByRestaurantId("22")).thenReturn(entity);
 		when(repo.save(entity)).thenReturn(entity);
 		when(mapper.convert(submission)).thenReturn(entity);
 		when(mapper.convert(entity)).thenReturn(submission);
@@ -160,8 +160,8 @@ public class RestaurantServiceTest {
 	public void updateRestaurantNotFoundTest() {
 		MockitoAnnotations.initMocks(this);
 		RestaurantDTO submission = makeRestaurantDTO();
-		submission.setRestaurantId(22L);
-		when(repo.findByRestaurantId(22L)).thenReturn(null);
+		submission.setRestaurantId("22");
+		when(repo.findByRestaurantId("22")).thenReturn(null);
 		
 		RestaurantDTO result = service.updateRestaurant(submission);
 		assertThat(result).isNull();
@@ -173,8 +173,8 @@ public class RestaurantServiceTest {
 		RestaurantDTO returnedDto = dto;
 		Restaurant entity = makeRestaurantEntity();
 		Restaurant result = entity;
-		result.setRestaurantId(22L);
-		returnedDto.setRestaurantId(22L);
+		result.setRestaurantId("22");
+		returnedDto.setRestaurantId("22");
 		
 		MockitoAnnotations.initMocks(this);
 
@@ -185,7 +185,7 @@ public class RestaurantServiceTest {
 
 		RestaurantDTO created = service.createRestaurant(dto);
 		assertThat(created.getName()).isSameAs(dto.getName());
-		assertThat(created.getRestaurantId()).isSameAs(22L);
+		assertThat(created.getRestaurantId()).isSameAs("22");
 	}
 
 	@Test
@@ -203,18 +203,18 @@ public class RestaurantServiceTest {
 	public void deleteRestaurantTest() {
 		MockitoAnnotations.initMocks(this);
 
-		when(repo.findByRestaurantId(22L)).thenReturn(new Restaurant());
+		when(repo.findByRestaurantId("22")).thenReturn(new Restaurant());
 
-		assertTrue(service.deleteRestaurant(22L));
+		assertTrue(service.deleteRestaurant("22"));
 	}
 
 	@Test
 	public void deleteNonexistentRestaurantTest() {
 		MockitoAnnotations.initMocks(this);
 
-		when(repo.findByRestaurantId(22L)).thenReturn(null);
+		when(repo.findByRestaurantId("22")).thenReturn(null);
 
-		assertFalse(service.deleteRestaurant(22L));
+		assertFalse(service.deleteRestaurant("22"));
 	}
 	
 	private RestaurantDTO makeRestaurantDTO() {

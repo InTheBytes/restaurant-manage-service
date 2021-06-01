@@ -15,7 +15,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name = "user_id", nullable = false)
-	private Long userId;
+	private String userId;
 
 	@Basic
 	@Column(name = "username", nullable = false, length = 45)
@@ -49,10 +49,10 @@ public class User {
 	@JoinColumn(name = "user_role", referencedColumnName = "role_id", nullable = false)
 	private Role role;
 
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

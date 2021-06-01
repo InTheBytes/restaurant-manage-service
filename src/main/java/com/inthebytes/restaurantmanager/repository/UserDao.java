@@ -9,9 +9,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface UserDao extends JpaRepository<User, Long> {
+public interface UserDao extends JpaRepository<User, String> {
 	User findByEmailIgnoreCase(String email);
 	List<User> findAll();
 	User findByUsername(String username);
-	User findByUserId(Long userId);
+	User findByUserId(String userId);
 }

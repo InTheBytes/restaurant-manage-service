@@ -40,7 +40,7 @@ public class RestaurantAccountService {
 		return role;
 	}
 	
-	public RestaurantDTO addManager(Long restaurantId, UserDto user) {
+	public RestaurantDTO addManager(String restaurantId, UserDto user) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
 		User userEntity = userRepo.findByUsername(user.getUsername());
 		
@@ -55,14 +55,14 @@ public class RestaurantAccountService {
 		
 	}
 	
-	public RestaurantDTO addManager(Long restaurantId, Long userId) {
+	public RestaurantDTO addManager(String restaurantId, String userId) {
 		User userEntity = userRepo.findByUserId(userId);
 		if (userEntity == null)
 			return null;
 		return addManager(restaurantId, userMapper.convert(userEntity));
 	}
 	
-	public RestaurantDTO removeManager(Long restaurantId, UserDto user) {
+	public RestaurantDTO removeManager(String restaurantId, UserDto user) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
 		User userEntity = userRepo.findByUsername(user.getUsername());
 		if (userEntity == null || restaurant == null)
@@ -77,7 +77,7 @@ public class RestaurantAccountService {
 		return null;
 	}
 	
-	public RestaurantDTO removeManager(Long restaurantId, Long userId) {
+	public RestaurantDTO removeManager(String restaurantId, String userId) {
 		User userEntity = userRepo.findByUserId(userId);
 		if (userEntity == null)
 			return null;

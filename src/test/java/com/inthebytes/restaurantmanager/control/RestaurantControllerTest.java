@@ -55,7 +55,7 @@ public class RestaurantControllerTest {
 		RestaurantDTO rest1 = makeRestaurantModel();
 		RestaurantDTO rest2 = makeRestaurantModel();
 		rest2.setName("A different one");
-		rest2.setRestaurantId(30L);
+		rest2.setRestaurantId("30");
 		List<RestaurantDTO> restaurants1 = new ArrayList<RestaurantDTO>();
 		restaurants1.add(rest1);
 		List<RestaurantDTO> restaurants2 = new ArrayList<RestaurantDTO>();
@@ -97,7 +97,7 @@ public class RestaurantControllerTest {
 	public void getRestaurantByNameTest() throws Exception {
 		RestaurantDTO result = makeRestaurantModel();
 		result.setName("test");
-		when(service.getRestaurant("test")).thenReturn(result);
+		when(service.getRestaurantByName("test")).thenReturn(result);
 		
 		mock.perform(get("/apis/restaurant/name/test")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -107,7 +107,7 @@ public class RestaurantControllerTest {
 	
 	@Test
 	public void getRestaurantByNameNotFoundTest() throws Exception {
-		when(service.getRestaurant("test")).thenReturn(null);
+		when(service.getRestaurantByName("test")).thenReturn(null);
 		
 		mock.perform(get("/apis/restaurant/name/test")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -117,8 +117,8 @@ public class RestaurantControllerTest {
 	@Test
 	public void getRestaurantTest() throws Exception {
 		RestaurantDTO result = makeRestaurantModel();
-		result.setRestaurantId(22L);
-		when(service.getRestaurant(22L)).thenReturn(result);
+		result.setRestaurantId("22");
+		when(service.getRestaurant("22")).thenReturn(result);
 		
 		mock.perform(get("/apis/restaurant/22")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -128,7 +128,7 @@ public class RestaurantControllerTest {
 	
 	@Test
 	public void getRestaurantNotFoundTest() throws Exception {
-		when(service.getRestaurant(22L)).thenReturn(null);
+		when(service.getRestaurant("22")).thenReturn(null);
 		
 		mock.perform(get("/apis/restaurant/22")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -140,8 +140,8 @@ public class RestaurantControllerTest {
 		RestaurantDTO submission = makeRestaurantModel();
 		RestaurantDTO result = makeRestaurantModel();
 		RestaurantDTO transit = makeRestaurantModel();
-		transit.setRestaurantId(22L);
-		result.setRestaurantId(22L);
+		transit.setRestaurantId("22");
+		result.setRestaurantId("22");
 		
 		when(service.updateRestaurant(transit)).thenReturn(result);
 		
@@ -149,7 +149,7 @@ public class RestaurantControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(submission)))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.restaurantId").value(22L));
+		.andExpect(jsonPath("$.restaurantId").value("22"));
 	}
 	
 	@Test
@@ -167,7 +167,7 @@ public class RestaurantControllerTest {
 	public void createRestaurantTest() throws JsonProcessingException, Exception {
 		RestaurantDTO restaurant = makeRestaurantModel();
 		RestaurantDTO result = makeRestaurantModel();
-		result.setRestaurantId(22L);
+		result.setRestaurantId("22");
 
 		when(service.createRestaurant(restaurant)).thenReturn(result);
 
@@ -192,7 +192,7 @@ public class RestaurantControllerTest {
 
 	@Test
 	public void deleteRestaurantTest() throws Exception{
-		when(service.deleteRestaurant(22L)).thenReturn(true);
+		when(service.deleteRestaurant("22")).thenReturn(true);
 		
 		mock.perform(delete("/apis/restaurant/22"))
 		.andExpect(MockMvcResultMatchers.status().isOk());
@@ -200,7 +200,7 @@ public class RestaurantControllerTest {
 
 	@Test
 	public void deleteNonexistentRestaurantTest() throws Exception {
-		when(service.deleteRestaurant(22L)).thenReturn(false);
+		when(service.deleteRestaurant("22")).thenReturn(false);
 		
 		mock.perform(delete("/apis/restaurant/22"))
 		.andExpect(MockMvcResultMatchers.status().isNotFound());

@@ -8,16 +8,16 @@ public class RoleDto {
 
 	@Id
 	@NonNull
-	private Long roleId;
+	private String roleId;
 	
 	@NonNull
 	private String name;
 
-	public Long getRoleId() {
+	public String getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Long roleId) {
+	public void setRoleId(String roleId) {
 		this.roleId = roleId;
 	}
 

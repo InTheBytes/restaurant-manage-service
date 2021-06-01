@@ -30,10 +30,10 @@ public class UserMapperTest {
 	private void makeDto() {
 		userDto = new UserDto();
 		RoleDto role = new RoleDto();
-		role.setRoleId(1L);
+		role.setRoleId("1");
 		role.setName("Test");
 		userDto.setRole(role);
-		userDto.setUserId(1L);
+		userDto.setUserId("1");
 		userDto.setUsername("Test");
 		userDto.setIsActive(true);
 	}
@@ -41,10 +41,10 @@ public class UserMapperTest {
 	private void makeEntity() {
 		userEntity = new User();
 		Role role = new Role();
-		role.setRoleId(1L);
+		role.setRoleId("1");
 		role.setName("Test");
 		userEntity.setRole(role);
-		userEntity.setUserId(1L);
+		userEntity.setUserId("1");
 		userEntity.setUsername("Test");
 		userEntity.setActive(true);
 	}

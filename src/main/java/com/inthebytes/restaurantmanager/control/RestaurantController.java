@@ -53,18 +53,18 @@ public class RestaurantController {
 	
 	@GetMapping(value = "/name/{name}")
 	public ResponseEntity<RestaurantDTO> getRestaurantByName(@PathVariable("name") String name) {
-		RestaurantDTO result = service.getRestaurant(name);
+		RestaurantDTO result = service.getRestaurantByName(name);
 		return (result == null) ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok().body(result);
 	}
 	
 	@GetMapping(value = "/{restaurantId}")
-	public ResponseEntity<RestaurantDTO> getRestaurant(@PathVariable("restaurantId") Long restaurantId) {
+	public ResponseEntity<RestaurantDTO> getRestaurant(@PathVariable("restaurantId") String restaurantId) {
 		RestaurantDTO result = service.getRestaurant(restaurantId);
 		return (result == null) ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok().body(result);
 	}
 	
 	@PutMapping(value = "/{restaurantId}")
-	public ResponseEntity<RestaurantDTO> updateRestaurant(@Valid @RequestBody RestaurantDTO restaurant, @PathVariable("restaurantId") Long restaurantId) {
+	public ResponseEntity<RestaurantDTO> updateRestaurant(@Valid @RequestBody RestaurantDTO restaurant, @PathVariable("restaurantId") String restaurantId) {
 		restaurant.setRestaurantId(restaurantId);
 		RestaurantDTO result = service.updateRestaurant(restaurant);
 		return (result == null) ? ResponseEntity.notFound().build() : ResponseEntity.ok().body(result);
@@ -75,7 +75,7 @@ public class RestaurantController {
 		try {
 			RestaurantDTO result = service.createRestaurant(restaurant);
 			HttpHeaders headers = new HttpHeaders();
-			headers.set("Location", Long.toString(result.getRestaurantId()));
+			headers.set("Location", result.getRestaurantId());
 			return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(result);
 		}
 		catch (EntityExistsException e) {
@@ -85,7 +85,7 @@ public class RestaurantController {
 
 
 	@DeleteMapping(value = "/{restaurantId}")
-	public ResponseEntity<?> deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
+	public ResponseEntity<?> deleteRestaurant(@PathVariable("restaurantId") String restaurantId) {
 		if (service.deleteRestaurant(restaurantId)) {
 			return ResponseEntity.ok().build();
 		}

@@ -30,7 +30,7 @@ public class RestaurantService {
 		return mapper.convert(restaurantRepo.save(mapper.convert(restaurant)));
 	}
 
-	public Boolean deleteRestaurant(Long restaurantId) {
+	public Boolean deleteRestaurant(String restaurantId) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
 		if (restaurant == null)
 			return false;
@@ -51,7 +51,7 @@ public class RestaurantService {
 	}
 	
 
-	public RestaurantDTO getRestaurant(String name) {
+	public RestaurantDTO getRestaurantByName(String name) {
 		Restaurant restaurant = restaurantRepo.findByName(name);
 		if (restaurant == null)
 			return null;
@@ -59,7 +59,7 @@ public class RestaurantService {
 			return mapper.convert(restaurant);
 	}
 	
-	public RestaurantDTO getRestaurant(Long restuarantId) {
+	public RestaurantDTO getRestaurant(String restuarantId) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restuarantId);
 		if (restaurant == null)
 			return null;
