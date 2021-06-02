@@ -19,7 +19,9 @@ import com.inthebytes.restaurantmanager.service.RestaurantAccountService;
 
 @RestController
 @RequestMapping("/apis/restaurants")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000",
+		"http://stacklunch.com", "http://admin.stacklunch.com", 
+		"http://driver.stacklunch.com", "http://manager.stacklunch.com"})
 public class RestaurantAccountController {
 	
 	@Autowired
