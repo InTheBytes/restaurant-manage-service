@@ -61,6 +61,9 @@ public class RestaurantMapper {
 		});
 		dto.setFoods(foods);
 		
+		if(entity.getManager() == null)
+			return dto;
+		
 		List<UserDto> managers = new ArrayList<UserDto>();
 		entity.getManager().stream().forEach((x) -> {
 			UserDto manager = mapper.convert(x);

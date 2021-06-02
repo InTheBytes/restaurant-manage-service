@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "food")
 public class Food implements Serializable {
@@ -19,7 +21,11 @@ public class Food implements Serializable {
 	private static final long serialVersionUID = -1018612674070118304L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(
+	    name = "UUID",
+	    strategy = "org.hibernate.id.UUIDGenerator"
+	)
 	@Column(name = "food_id")
 	private String foodId;
 	

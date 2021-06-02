@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.lang.Nullable;
+
 @Entity
 @Table(name = "restaurant")
 public class Restaurant implements Serializable {
@@ -23,7 +26,11 @@ public class Restaurant implements Serializable {
 	private static final long serialVersionUID = -8756584311354409044L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(
+	    name = "UUID",
+	    strategy = "org.hibernate.id.UUIDGenerator"
+	)
 	@Column(name = "restaurant_id")
 	private String restaurantId;
 
@@ -41,6 +48,7 @@ public class Restaurant implements Serializable {
 	private List<Food> foods;
 	
 	@OneToMany
+	@Nullable
 	@JoinTable(name = "manager",
 			joinColumns = {@JoinColumn(name = "restaurant_id")},
 			inverseJoinColumns = {@JoinColumn(name = "user_id")})
