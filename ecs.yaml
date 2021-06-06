@@ -114,7 +114,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 180
-      HealthCheckPath: '/apis/restaurant?page-size=1&page=1'
+      HealthCheckPath: '/actuator/health'
       HealthCheckTimeoutSeconds: 30
       HealthCheckPort: '8080'
       UnhealthyThresholdCount: 2
@@ -136,6 +136,7 @@ Resources:
           Values:
             - /apis/restaurants*
             - /apis/restaurant*
+            - /v3/api-docs/restaurantservice
       Actions:
         - Type: forward
           TargetGroupArn: !Ref TargetGroup
