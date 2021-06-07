@@ -6,6 +6,12 @@ import javax.persistence.EntityExistsException;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,11 +34,20 @@ import com.inthebytes.restaurantmanager.service.RestaurantService;
 
 @RestController
 @RequestMapping("/apis/restaurant")
+@Tag(name = "restaurant", description = "The restaurant manage API")
 public class RestaurantController {
 
 	@Autowired
 	RestaurantService service;
-	
+
+	@Operation(summary = "Get all restaurants", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class, type = "List")),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class, type = "List"))
+			}),
+			@ApiResponse(responseCode = "204", description = "No restaurant were found", content = @Content)
+	})
 	@GetMapping(value = "")
 	public ResponseEntity<List<RestaurantDTO>> getRestaurants(
 			@RequestParam(value = "page-size") Integer pageSize,
@@ -49,26 +64,58 @@ public class RestaurantController {
 		}
 			
 	}
-	
+
+	@Operation(summary = "Get a restaurant by name", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class)),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class))
+			}),
+			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
+	})
 	@GetMapping(value = "/name/{name}")
 	public ResponseEntity<RestaurantDTO> getRestaurantByName(@PathVariable("name") String name) {
 		RestaurantDTO result = service.getRestaurantByName(name);
 		return (result == null) ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok().body(result);
 	}
-	
+
+	@Operation(summary = "Get a restaurant by ID", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class)),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class))
+			}),
+			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
+	})
 	@GetMapping(value = "/{restaurantId}")
 	public ResponseEntity<RestaurantDTO> getRestaurant(@PathVariable("restaurantId") String restaurantId) {
 		RestaurantDTO result = service.getRestaurant(restaurantId);
 		return (result == null) ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok().body(result);
 	}
-	
+
+	@Operation(summary = "Update a restaurant by ID", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class)),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class))
+			}),
+			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
+	})
 	@PutMapping(value = "/{restaurantId}")
 	public ResponseEntity<RestaurantDTO> updateRestaurant(@Valid @RequestBody RestaurantDTO restaurant, @PathVariable("restaurantId") String restaurantId) {
 		restaurant.setRestaurantId(restaurantId);
 		RestaurantDTO result = service.updateRestaurant(restaurant);
 		return (result == null) ? ResponseEntity.notFound().build() : ResponseEntity.ok().body(result);
 	}
-	
+
+	@Operation(summary = "Create a restaurant", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class)),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class))
+			}),
+			@ApiResponse(responseCode = "409", description = "Restaurant could not be created", content = @Content)
+	})
 	@PostMapping(value = "")
 	public ResponseEntity<RestaurantDTO> startRestaurantCreation(@Valid @RequestBody RestaurantDTO restaurant) {
 		try {
@@ -82,7 +129,11 @@ public class RestaurantController {
 		}
 	}
 
-
+	@Operation(summary = "Delete a restaurant by ID", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
+	})
 	@DeleteMapping(value = "/{restaurantId}")
 	public ResponseEntity<?> deleteRestaurant(@PathVariable("restaurantId") String restaurantId) {
 		if (service.deleteRestaurant(restaurantId)) {
