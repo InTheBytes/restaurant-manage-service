@@ -2,10 +2,14 @@ package com.inthebytes.restaurantmanager.control;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,9 +23,7 @@ import com.inthebytes.restaurantmanager.service.RestaurantAccountService;
 
 @RestController
 @RequestMapping("/apis/restaurants")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000",
-		"http://stacklunch.com", "http://admin.stacklunch.com", 
-		"http://driver.stacklunch.com", "http://manager.stacklunch.com"})
+@Tag(name = "restaurant", description = "The restaurant manage API")
 public class RestaurantAccountController {
 	
 	@Autowired
@@ -32,7 +34,15 @@ public class RestaurantAccountController {
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(restaurant);
 	}
-	
+
+	@Operation(summary = "Add manager to restaurant by User Object", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class)),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class))
+			}),
+			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
+	})
 	@PutMapping(value = "/{restaurantId}/managers")
 	public ResponseEntity<RestaurantDTO> addManager(
 			@PathVariable("restaurantId") String id, 
@@ -41,8 +51,15 @@ public class RestaurantAccountController {
 		RestaurantDTO restaurant = service.addManager(id, user);
 		return buildResponse(restaurant);
 	}
-	
-	
+
+	@Operation(summary = "Add manager to restaurant by User ID", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class)),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class))
+			}),
+			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
+	})
 	@PutMapping(value = "/{restaurantId}/managers/{userId}")
 	public ResponseEntity<RestaurantDTO> addManagerById(
 			@PathVariable("restaurantId") String restaurantId,
@@ -51,8 +68,15 @@ public class RestaurantAccountController {
 		RestaurantDTO restaurant = service.addManager(restaurantId, userId);
 		return buildResponse(restaurant);
 	}
-	
-	
+
+	@Operation(summary = "Delete manager from restaurant User Object", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class)),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class))
+			}),
+			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
+	})
 	@DeleteMapping(value = "/{restaurantId}/managers")
 	public ResponseEntity<RestaurantDTO> deleteManager(
 			@PathVariable String restaurantId, 
@@ -61,8 +85,15 @@ public class RestaurantAccountController {
 		RestaurantDTO restaurant = service.removeManager(restaurantId, user);
 		return buildResponse(restaurant);
 	}
-	
-	
+
+	@Operation(summary = "Delete manager from restaurant by User ID", description = "", tags = { "restaurant" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class)),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class))
+			}),
+			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
+	})
 	@DeleteMapping(value = "/{restaurantId}/managers/{userId}")
 	public ResponseEntity<RestaurantDTO> deleteManagerById(
 			@PathVariable("restaurantId") String restaurantId,
