@@ -58,8 +58,7 @@ public class RestaurantController {
 		if (restaurants == null || restaurants.getContent().size() == 0)
 			return ResponseEntity.noContent().build();
 		else {
-			HttpHeaders headers = new HttpHeaders();
-			return ResponseEntity.ok().headers(headers).body(restaurants);
+			return ResponseEntity.ok().body(restaurants);
 		}
 			
 	}
