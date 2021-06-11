@@ -20,14 +20,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.inthebytes.restaurantmanager.dao.RestaurantDao;
 import com.inthebytes.restaurantmanager.dto.LocationDTO;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Location;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
-import com.inthebytes.restaurantmanager.repository.RestaurantDao;
 
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RestaurantServiceTest {
@@ -40,35 +41,6 @@ public class RestaurantServiceTest {
 
 	@InjectMocks
 	RestaurantService service;
-	
-	@Test
-	public void getRestaurantTest() {
-		MockitoAnnotations.initMocks(this);
-		Restaurant ent1 = makeRestaurantEntity();
-		Restaurant ent2 = makeRestaurantEntity();
-		RestaurantDTO dto1 = makeRestaurantDTO();
-		RestaurantDTO dto2 = makeRestaurantDTO();
-		List<Restaurant> restaurants = new ArrayList<Restaurant>();
-		restaurants.add(ent1);
-		restaurants.add(ent2);
-		
-		when(repo.findAll()).thenReturn(restaurants);
-		when(mapper.convert(ent1)).thenReturn(dto1);
-		when(mapper.convert(ent2)).thenReturn(dto2);
-		
-		List<RestaurantDTO> results = service.getRestaurant();
-		assertThat(dto1).isIn(results);
-		assertThat(dto2).isIn(results);
-	}
-	
-	@Test
-	public void getRestaurantEmptyTest() {
-		MockitoAnnotations.initMocks(this);
-		when(repo.findAll()).thenReturn(new ArrayList<Restaurant>());
-		
-		List<RestaurantDTO> results = service.getRestaurant();
-		assertThat(results).hasSize(0);
-	}
 	
 	@Test
 	public void getRestaurantPagesTest() {
@@ -90,10 +62,8 @@ public class RestaurantServiceTest {
 		when(mapper.convert(ent1)).thenReturn(dto1);
 		when(mapper.convert(ent2)).thenReturn(dto2);
 		
-		List<List<RestaurantDTO>> resultPages = service.getRestaurantPages(1);
+		Page<RestaurantDTO> resultPages = service.getRestaurantPages(0, 2);
 		assertThat(resultPages).hasSize(2);
-		assertThat(resultPages.get(0)).hasSize(1);
-		assertThat(resultPages.get(0)).hasSize(1);
 	}
 	
 	@Test

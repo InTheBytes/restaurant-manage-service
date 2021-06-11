@@ -1,4 +1,4 @@
-package com.inthebytes.restaurantmanager.repository;
+package com.inthebytes.restaurantmanager.dao;
 
 import com.inthebytes.restaurantmanager.entity.Role;
 import com.inthebytes.restaurantmanager.entity.User;
