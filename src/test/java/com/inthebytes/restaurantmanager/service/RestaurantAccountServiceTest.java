@@ -17,6 +17,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.inthebytes.restaurantmanager.dao.RestaurantDao;
+import com.inthebytes.restaurantmanager.dao.RoleDao;
+import com.inthebytes.restaurantmanager.dao.UserDao;
 import com.inthebytes.restaurantmanager.dto.LocationDTO;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.dto.RoleDto;
@@ -27,9 +30,6 @@ import com.inthebytes.restaurantmanager.entity.Role;
 import com.inthebytes.restaurantmanager.entity.User;
 import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
 import com.inthebytes.restaurantmanager.mapper.UserMapper;
-import com.inthebytes.restaurantmanager.repository.RestaurantDao;
-import com.inthebytes.restaurantmanager.repository.RoleDao;
-import com.inthebytes.restaurantmanager.repository.UserDao;
 
 @RunWith(MockitoJUnitRunner.class)
 @TestInstance(Lifecycle.PER_CLASS)

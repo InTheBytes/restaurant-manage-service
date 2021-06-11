@@ -8,12 +8,15 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.inthebytes.restaurantmanager.dao.RestaurantDao;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
 import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
-import com.inthebytes.restaurantmanager.repository.RestaurantDao;
 
 @Service
 public class RestaurantService {
@@ -37,17 +40,9 @@ public class RestaurantService {
 		restaurantRepo.delete(restaurant);
 		return true;
 	}
-
-	public List<RestaurantDTO> getRestaurant() {
-		return restaurantRepo.findAll().stream().map((x) -> mapper.convert(x)).collect(Collectors.toList());
-	}
 	
-	
-	public List<List<RestaurantDTO>> getRestaurantPages(Integer pageSize) {
-		List<RestaurantDTO> manuscript = getRestaurant();
-		Map<Integer, List<RestaurantDTO>> pages = manuscript.stream().collect(Collectors.groupingBy(x -> manuscript.indexOf(x)/pageSize));
-		List<List<RestaurantDTO>> paginated = new ArrayList<List<RestaurantDTO>>(pages.values());
-		return paginated;
+	public Page<RestaurantDTO> getRestaurantPages(Integer page, Integer pageSize) {
+		return restaurantRepo.findAll(PageRequest.of(page, pageSize)).map((x) -> mapper.convert(x));
 	}
 	
 

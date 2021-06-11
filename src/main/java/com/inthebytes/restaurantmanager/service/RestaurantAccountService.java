@@ -3,6 +3,9 @@ package com.inthebytes.restaurantmanager.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.inthebytes.restaurantmanager.dao.RestaurantDao;
+import com.inthebytes.restaurantmanager.dao.RoleDao;
+import com.inthebytes.restaurantmanager.dao.UserDao;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 import com.inthebytes.restaurantmanager.dto.UserDto;
 import com.inthebytes.restaurantmanager.entity.Restaurant;
@@ -10,9 +13,6 @@ import com.inthebytes.restaurantmanager.entity.Role;
 import com.inthebytes.restaurantmanager.entity.User;
 import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
 import com.inthebytes.restaurantmanager.mapper.UserMapper;
-import com.inthebytes.restaurantmanager.repository.RestaurantDao;
-import com.inthebytes.restaurantmanager.repository.RoleDao;
-import com.inthebytes.restaurantmanager.repository.UserDao;
 
 @Service
 public class RestaurantAccountService {

@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,18 +50,15 @@ public class RestaurantController {
 			@ApiResponse(responseCode = "204", description = "No restaurant were found", content = @Content)
 	})
 	@GetMapping(value = "")
-	public ResponseEntity<List<RestaurantDTO>> getRestaurants(
-			@RequestParam(value = "page-size") Integer pageSize,
-			@RequestParam(value = "page") Integer pageNum) {
-		List<List<RestaurantDTO>> restaurants = service.getRestaurantPages(pageSize);
-		if (restaurants == null || restaurants.size() == 0)
+	public ResponseEntity<Page<RestaurantDTO>> getRestaurants(
+			@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+			@RequestParam(value = "page-size", required = false, defaultValue = "10") Integer pageSize
+			) {
+		Page<RestaurantDTO> restaurants = service.getRestaurantPages(page, pageSize);
+		if (restaurants == null || restaurants.getContent().size() == 0)
 			return ResponseEntity.noContent().build();
 		else {
-			HttpHeaders headers = new HttpHeaders();
-			headers.set("page", Integer.toString(pageNum));
-			headers.set("total-pages", Integer.toString(restaurants.size()));
-			headers.set("Access-Control-Expose-Headers", "page, total-pages");
-			return ResponseEntity.ok().headers(headers).body(restaurants.get(pageNum-1));
+			return ResponseEntity.ok().body(restaurants);
 		}
 			
 	}

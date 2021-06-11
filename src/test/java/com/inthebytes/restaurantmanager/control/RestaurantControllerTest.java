@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -56,28 +58,26 @@ public class RestaurantControllerTest {
 		RestaurantDTO rest2 = makeRestaurantModel();
 		rest2.setName("A different one");
 		rest2.setRestaurantId("30");
-		List<RestaurantDTO> restaurants1 = new ArrayList<RestaurantDTO>();
-		restaurants1.add(rest1);
-		List<RestaurantDTO> restaurants2 = new ArrayList<RestaurantDTO>();
-		restaurants2.add(rest2);
 		
-		List<List<RestaurantDTO>> restaurants = new ArrayList<List<RestaurantDTO>>();
-		restaurants.add(restaurants1);
-		restaurants.add(restaurants2);
+		List<RestaurantDTO> restaurants = new ArrayList<RestaurantDTO>();
+		restaurants.add(rest1);
+		restaurants.add(rest2);
 		
-		when(service.getRestaurantPages(1)).thenReturn(restaurants);
+		Page<RestaurantDTO> page = new PageImpl<RestaurantDTO>(restaurants);
+		
+		when(service.getRestaurantPages(1, 1)).thenReturn(page);
 		
 		mock.perform(get("/apis/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(jsonPath("$", hasSize(1)))
-		.andExpect(MockMvcResultMatchers.header().string("page", Matchers.containsString("1")))
-		.andExpect(MockMvcResultMatchers.header().string("total-pages", Matchers.containsString("2")));
+		.andExpect(jsonPath("$", hasSize(1)));
 	}
 	
 	@Test
 	public void getRestaurantsEmptyTest() throws Exception {
-		when(service.getRestaurantPages(1)).thenReturn(new ArrayList<List<RestaurantDTO>>());
+
+		Page<RestaurantDTO> page = Page.empty();
+		when(service.getRestaurantPages(1, 1)).thenReturn(page);
 		
 		mock.perform(get("/apis/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -86,7 +86,7 @@ public class RestaurantControllerTest {
 	
 	@Test
 	public void getRestaurantsNullTest() throws Exception {
-		when(service.getRestaurantPages(1)).thenReturn(null);
+		when(service.getRestaurantPages(1, 1)).thenReturn(null);
 		
 		mock.perform(get("/apis/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
