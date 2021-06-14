@@ -29,6 +29,8 @@ import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
 
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RestaurantServiceTest {
@@ -58,7 +60,8 @@ public class RestaurantServiceTest {
 		
 		restaurants.add(ent1);
 		restaurants.add(ent2);
-		when(repo.findAll()).thenReturn(restaurants);
+		Page<Restaurant> page = new PageImpl<Restaurant>(restaurants);
+		when(repo.findAll(PageRequest.of(0, 2))).thenReturn(page);
 		when(mapper.convert(ent1)).thenReturn(dto1);
 		when(mapper.convert(ent2)).thenReturn(dto2);
 		

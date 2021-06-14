@@ -69,8 +69,7 @@ public class RestaurantControllerTest {
 		
 		mock.perform(get("/apis/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(jsonPath("$", hasSize(1)));
+		.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	
 	@Test
