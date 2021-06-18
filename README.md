@@ -1,3 +1,3 @@
 # Restaurant Manage Service
 
-Port: 8081
+Admin service for managing restaurants (CRUD)
