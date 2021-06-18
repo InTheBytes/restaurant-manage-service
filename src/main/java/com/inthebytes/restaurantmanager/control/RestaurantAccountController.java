@@ -22,7 +22,7 @@ import com.inthebytes.restaurantmanager.dto.UserDto;
 import com.inthebytes.restaurantmanager.service.RestaurantAccountService;
 
 @RestController
-@RequestMapping("/apis/restaurants")
+@RequestMapping("/restaurant")
 @Tag(name = "restaurant", description = "The restaurant manage API")
 public class RestaurantAccountController {
 	
@@ -43,7 +43,7 @@ public class RestaurantAccountController {
 			}),
 			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
 	})
-	@PutMapping(value = "/{restaurantId}/managers")
+	@PutMapping(value = "/{restaurantId}/manager")
 	public ResponseEntity<RestaurantDTO> addManager(
 			@PathVariable("restaurantId") String id, 
 			@Valid @RequestBody UserDto user) {
@@ -60,7 +60,7 @@ public class RestaurantAccountController {
 			}),
 			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
 	})
-	@PutMapping(value = "/{restaurantId}/managers/{userId}")
+	@PutMapping(value = "/{restaurantId}/manager/{userId}")
 	public ResponseEntity<RestaurantDTO> addManagerById(
 			@PathVariable("restaurantId") String restaurantId,
 			@PathVariable("userId") String userId) {
@@ -77,7 +77,7 @@ public class RestaurantAccountController {
 			}),
 			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
 	})
-	@DeleteMapping(value = "/{restaurantId}/managers")
+	@DeleteMapping(value = "/{restaurantId}/manager")
 	public ResponseEntity<RestaurantDTO> deleteManager(
 			@PathVariable String restaurantId, 
 			@Valid @RequestBody UserDto user) {
@@ -94,7 +94,7 @@ public class RestaurantAccountController {
 			}),
 			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
 	})
-	@DeleteMapping(value = "/{restaurantId}/managers/{userId}")
+	@DeleteMapping(value = "/{restaurantId}/manager/{userId}")
 	public ResponseEntity<RestaurantDTO> deleteManagerById(
 			@PathVariable("restaurantId") String restaurantId,
 			@PathVariable("userId") String userId) {

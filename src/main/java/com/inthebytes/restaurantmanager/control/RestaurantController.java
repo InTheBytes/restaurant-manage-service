@@ -1,7 +1,5 @@
 package com.inthebytes.restaurantmanager.control;
 
-import java.util.List;
-
 import javax.persistence.EntityExistsException;
 
 import javax.validation.Valid;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.inthebytes.restaurantmanager.service.RestaurantService;
 
 @RestController
-@RequestMapping("/apis/restaurant")
+@RequestMapping("/restaurant")
 @Tag(name = "restaurant", description = "The restaurant manage API")
 public class RestaurantController {
 
