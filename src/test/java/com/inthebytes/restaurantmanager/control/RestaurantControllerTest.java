@@ -67,7 +67,7 @@ public class RestaurantControllerTest {
 		
 		when(service.getRestaurantPages(1, 1)).thenReturn(page);
 		
-		mock.perform(get("/apis/restaurant?page-size=1&page=1")
+		mock.perform(get("/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk());
 	}
@@ -78,7 +78,7 @@ public class RestaurantControllerTest {
 		Page<RestaurantDTO> page = Page.empty();
 		when(service.getRestaurantPages(1, 1)).thenReturn(page);
 		
-		mock.perform(get("/apis/restaurant?page-size=1&page=1")
+		mock.perform(get("/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNoContent());
 	}
@@ -87,7 +87,7 @@ public class RestaurantControllerTest {
 	public void getRestaurantsNullTest() throws Exception {
 		when(service.getRestaurantPages(1, 1)).thenReturn(null);
 		
-		mock.perform(get("/apis/restaurant?page-size=1&page=1")
+		mock.perform(get("/restaurant?page-size=1&page=1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNoContent());
 	}
@@ -98,7 +98,7 @@ public class RestaurantControllerTest {
 		result.setName("test");
 		when(service.getRestaurantByName("test")).thenReturn(result);
 		
-		mock.perform(get("/apis/restaurant/name/test")
+		mock.perform(get("/restaurant/name/test")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.name").value(result.getName()));
@@ -108,7 +108,7 @@ public class RestaurantControllerTest {
 	public void getRestaurantByNameNotFoundTest() throws Exception {
 		when(service.getRestaurantByName("test")).thenReturn(null);
 		
-		mock.perform(get("/apis/restaurant/name/test")
+		mock.perform(get("/restaurant/name/test")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNotFound());
 	}
@@ -119,7 +119,7 @@ public class RestaurantControllerTest {
 		result.setRestaurantId("22");
 		when(service.getRestaurant("22")).thenReturn(result);
 		
-		mock.perform(get("/apis/restaurant/22")
+		mock.perform(get("/restaurant/22")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.name").value(result.getName()));
@@ -129,7 +129,7 @@ public class RestaurantControllerTest {
 	public void getRestaurantNotFoundTest() throws Exception {
 		when(service.getRestaurant("22")).thenReturn(null);
 		
-		mock.perform(get("/apis/restaurant/22")
+		mock.perform(get("/restaurant/22")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNotFound());
 	}
@@ -144,7 +144,7 @@ public class RestaurantControllerTest {
 		
 		when(service.updateRestaurant(transit)).thenReturn(result);
 		
-		mock.perform(put("/apis/restaurant/22")
+		mock.perform(put("/restaurant/22")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(submission)))
 		.andExpect(status().isOk())
@@ -156,7 +156,7 @@ public class RestaurantControllerTest {
 		RestaurantDTO submission = makeRestaurantModel();
 		when(service.updateRestaurant(submission)).thenReturn(null);
 		
-		mock.perform(put("/apis/restaurant/22")
+		mock.perform(put("/restaurant/22")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(submission)))
 		.andExpect(status().isNotFound());
@@ -170,7 +170,7 @@ public class RestaurantControllerTest {
 
 		when(service.createRestaurant(restaurant)).thenReturn(result);
 
-		mock.perform(post("/apis/restaurant")
+		mock.perform(post("/restaurant")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isCreated())
@@ -183,7 +183,7 @@ public class RestaurantControllerTest {
 		
 		when(service.createRestaurant(restaurant)).thenThrow(new EntityExistsException());
 
-		mock.perform(post("/apis/restaurant")
+		mock.perform(post("/restaurant")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(restaurant)))
 		.andExpect(MockMvcResultMatchers.status().isConflict());
@@ -193,7 +193,7 @@ public class RestaurantControllerTest {
 	public void deleteRestaurantTest() throws Exception{
 		when(service.deleteRestaurant("22")).thenReturn(true);
 		
-		mock.perform(delete("/apis/restaurant/22"))
+		mock.perform(delete("/restaurant/22"))
 		.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
@@ -201,7 +201,7 @@ public class RestaurantControllerTest {
 	public void deleteNonexistentRestaurantTest() throws Exception {
 		when(service.deleteRestaurant("22")).thenReturn(false);
 		
-		mock.perform(delete("/apis/restaurant/22"))
+		mock.perform(delete("/restaurant/22"))
 		.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 	
