@@ -48,7 +48,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Updating k8s image..'
-                sh './kubectl set image deployment/restaurant-service restaurant-service=241465518750.dkr.ecr.us-east-2.amazonaws.com/restaurantservice:latest'
+                sh '~/kubectl set image deployment/restaurant-service restaurant-service=241465518750.dkr.ecr.us-east-2.amazonaws.com/restaurantservice:latest'
             }
         }
     }
