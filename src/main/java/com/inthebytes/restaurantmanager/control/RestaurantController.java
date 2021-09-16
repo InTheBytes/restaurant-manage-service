@@ -59,6 +59,20 @@ public class RestaurantController {
 		}
 			
 	}
+	
+	@Operation(summary = "Get restaurant by manager ID", description = "", tags = { "restaurant", "manager" })
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successful operation", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantDTO.class)),
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = RestaurantDTO.class))
+			}),
+			@ApiResponse(responseCode = "404", description = "No restaurant found", content = @Content)
+	})
+	@GetMapping(value = "manager/{id}")
+	public ResponseEntity<RestaurantDTO> getByManagerID(@PathVariable("id") String id) {
+		RestaurantDTO result = service.getRestaurantByManagerID(id);
+		return (result != null) ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.NOT_FOUND).build(); 
+	}
 
 	@Operation(summary = "Get a restaurant by name", description = "", tags = { "restaurant" })
 	@ApiResponses(value = {

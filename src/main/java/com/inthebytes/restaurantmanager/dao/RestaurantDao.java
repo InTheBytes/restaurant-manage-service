@@ -11,5 +11,6 @@ import com.inthebytes.restaurantmanager.entity.Restaurant;
 public interface RestaurantDao extends JpaRepository<Restaurant, String> {
 	Restaurant findByRestaurantId(String id);
 	Restaurant findByName(String name);
+	Restaurant findByManagerUserId(String userId);
 	Page<Restaurant> findAll(Pageable pageable);
 }

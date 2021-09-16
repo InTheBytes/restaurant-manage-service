@@ -1,16 +1,10 @@
 package com.inthebytes.restaurantmanager.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.persistence.EntityExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.inthebytes.restaurantmanager.dao.RestaurantDao;
@@ -48,6 +42,14 @@ public class RestaurantService {
 
 	public RestaurantDTO getRestaurantByName(String name) {
 		Restaurant restaurant = restaurantRepo.findByName(name);
+		if (restaurant == null)
+			return null;
+		else
+			return mapper.convert(restaurant);
+	}
+	
+	public RestaurantDTO getRestaurantByManagerID(String id) {
+		Restaurant restaurant = restaurantRepo.findByManagerUserId(id);
 		if (restaurant == null)
 			return null;
 		else
