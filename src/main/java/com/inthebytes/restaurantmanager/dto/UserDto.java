@@ -1,13 +1,8 @@
 package com.inthebytes.restaurantmanager.dto;
 
 import javax.persistence.Id;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.springframework.lang.NonNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.Nullable;
 
 public class UserDto {
 
