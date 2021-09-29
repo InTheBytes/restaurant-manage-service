@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.inthebytes.restaurantmanager.dao.RestaurantDao;
 import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
@@ -13,6 +14,7 @@ import com.inthebytes.restaurantmanager.entity.Restaurant;
 import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
 
 @Service
+@Transactional
 public class RestaurantService {
 
 	@Autowired
