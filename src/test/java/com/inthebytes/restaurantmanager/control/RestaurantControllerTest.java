@@ -28,10 +28,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inthebytes.restaurantmanager.dto.LocationDTO;
-import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
 
 import com.inthebytes.restaurantmanager.service.RestaurantService;
+import com.inthebytes.stacklunch.data.location.LocationDto;
+import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
 
 @WebMvcTest(RestaurantController.class)
 @AutoConfigureMockMvc
@@ -45,16 +45,16 @@ public class RestaurantControllerTest {
 	
 	@Test
 	public void getRestaurantsTest() throws Exception {
-		RestaurantDTO rest1 = makeRestaurantModel();
-		RestaurantDTO rest2 = makeRestaurantModel();
+		RestaurantDto rest1 = makeRestaurantModel();
+		RestaurantDto rest2 = makeRestaurantModel();
 		rest2.setName("A different one");
 		rest2.setRestaurantId("30");
 		
-		List<RestaurantDTO> restaurants = new ArrayList<RestaurantDTO>();
+		List<RestaurantDto> restaurants = new ArrayList<RestaurantDto>();
 		restaurants.add(rest1);
 		restaurants.add(rest2);
 		
-		Page<RestaurantDTO> page = new PageImpl<RestaurantDTO>(restaurants);
+		Page<RestaurantDto> page = new PageImpl<RestaurantDto>(restaurants);
 		
 		when(service.getRestaurantPages(1, 1)).thenReturn(page);
 		
@@ -66,7 +66,7 @@ public class RestaurantControllerTest {
 	@Test
 	public void getRestaurantsEmptyTest() throws Exception {
 
-		Page<RestaurantDTO> page = Page.empty();
+		Page<RestaurantDto> page = Page.empty();
 		when(service.getRestaurantPages(1, 1)).thenReturn(page);
 		
 		mock.perform(get("/restaurant?page-size=1&page=1")
@@ -85,7 +85,7 @@ public class RestaurantControllerTest {
 	
 	@Test
 	public void getRestaurantByNameTest() throws Exception {
-		RestaurantDTO result = makeRestaurantModel();
+		RestaurantDto result = makeRestaurantModel();
 		result.setName("test");
 		when(service.getRestaurantByName("test")).thenReturn(result);
 		
@@ -106,7 +106,7 @@ public class RestaurantControllerTest {
 	
 	@Test
 	public void getRestaurantTest() throws Exception {
-		RestaurantDTO result = makeRestaurantModel();
+		RestaurantDto result = makeRestaurantModel();
 		result.setRestaurantId("22");
 		when(service.getRestaurant("22")).thenReturn(result);
 		
@@ -127,9 +127,9 @@ public class RestaurantControllerTest {
 	
 	@Test
 	public void updateRestaurantTest() throws Exception {
-		RestaurantDTO submission = makeRestaurantModel();
-		RestaurantDTO result = makeRestaurantModel();
-		RestaurantDTO transit = makeRestaurantModel();
+		RestaurantDto submission = makeRestaurantModel();
+		RestaurantDto result = makeRestaurantModel();
+		RestaurantDto transit = makeRestaurantModel();
 		transit.setRestaurantId("22");
 		result.setRestaurantId("22");
 		
@@ -144,7 +144,7 @@ public class RestaurantControllerTest {
 	
 	@Test
 	public void updateRestaurantNotFoundTest() throws JsonProcessingException, Exception {
-		RestaurantDTO submission = makeRestaurantModel();
+		RestaurantDto submission = makeRestaurantModel();
 		when(service.updateRestaurant(submission)).thenReturn(null);
 		
 		mock.perform(put("/restaurant/22")
@@ -155,8 +155,8 @@ public class RestaurantControllerTest {
 
 	@Test
 	public void createRestaurantTest() throws JsonProcessingException, Exception {
-		RestaurantDTO restaurant = makeRestaurantModel();
-		RestaurantDTO result = makeRestaurantModel();
+		RestaurantDto restaurant = makeRestaurantModel();
+		RestaurantDto result = makeRestaurantModel();
 		result.setRestaurantId("22");
 
 		when(service.createRestaurant(restaurant)).thenReturn(result);
@@ -170,7 +170,7 @@ public class RestaurantControllerTest {
 
 	@Test
 	public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
-		RestaurantDTO restaurant = makeRestaurantModel();
+		RestaurantDto restaurant = makeRestaurantModel();
 		
 		when(service.createRestaurant(restaurant)).thenThrow(new EntityExistsException());
 
@@ -196,10 +196,18 @@ public class RestaurantControllerTest {
 		.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 	
-	private RestaurantDTO makeRestaurantModel() {
-		LocationDTO location = new LocationDTO("Main St.", "123", "Sacramento", "California", 11111);
-		RestaurantDTO test = new RestaurantDTO("Lexi's Burgers", "Fast Food", location);
-
+	private RestaurantDto makeRestaurantModel() {
+		LocationDto location = new LocationDto();
+		location.setUnit("123");
+		location.setStreet("Main St.");
+		location.setCity("Sacramento");
+		location.setState("California");
+		location.setZipCode(11111);
+		
+		RestaurantDto test = new RestaurantDto();
+		test.setName("Lexi's Burgers");
+		test.setCuisine("Fast Food");
+		test.setLocation(location);
 		return test;
 	}
 }

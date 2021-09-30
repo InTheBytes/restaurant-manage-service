@@ -1,10 +1,11 @@
 package com.inthebytes.restaurantmanager.dao;
 
-import com.inthebytes.restaurantmanager.entity.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.inthebytes.stacklunch.data.role.Role;
+import com.inthebytes.stacklunch.data.role.RoleRepository;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RoleDao extends JpaRepository<Role, String> {
+public interface RoleDao extends RoleRepository {
 	Role findByName(String roleName);
 }

@@ -6,13 +6,11 @@ import org.springframework.stereotype.Service;
 import com.inthebytes.restaurantmanager.dao.RestaurantDao;
 import com.inthebytes.restaurantmanager.dao.RoleDao;
 import com.inthebytes.restaurantmanager.dao.UserDao;
-import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
-import com.inthebytes.restaurantmanager.dto.UserDto;
-import com.inthebytes.restaurantmanager.entity.Restaurant;
-import com.inthebytes.restaurantmanager.entity.Role;
-import com.inthebytes.restaurantmanager.entity.User;
-import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
-import com.inthebytes.restaurantmanager.mapper.UserMapper;
+import com.inthebytes.stacklunch.data.restaurant.Restaurant;
+import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
+import com.inthebytes.stacklunch.data.role.Role;
+import com.inthebytes.stacklunch.data.user.User;
+import com.inthebytes.stacklunch.data.user.UserDto;
 
 @Service
 public class RestaurantAccountService {
@@ -26,11 +24,6 @@ public class RestaurantAccountService {
 	@Autowired
 	private UserDao userRepo;
 	
-	@Autowired
-	private RestaurantMapper restaurantMapper;
-	
-	@Autowired
-	private UserMapper userMapper;
 	
 	private Role findManagerRole() {
 		Role role = roleRepo.findByName("restaurant");
@@ -40,7 +33,7 @@ public class RestaurantAccountService {
 		return role;
 	}
 	
-	public RestaurantDTO addManager(String restaurantId, UserDto user) {
+	public RestaurantDto addManager(String restaurantId, UserDto user) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
 		User userEntity = userRepo.findByUsername(user.getUsername());
 		
@@ -51,18 +44,18 @@ public class RestaurantAccountService {
 		userEntity = userRepo.save(userEntity);
 		
 		restaurant.getManager().add(userEntity);
-		return restaurantMapper.convert(restaurantRepo.save(restaurant));
+		return RestaurantDto.convert(restaurantRepo.save(restaurant));
 		
 	}
 	
-	public RestaurantDTO addManager(String restaurantId, String userId) {
+	public RestaurantDto addManager(String restaurantId, String userId) {
 		User userEntity = userRepo.findByUserId(userId);
 		if (userEntity == null)
 			return null;
-		return addManager(restaurantId, userMapper.convert(userEntity));
+		return addManager(restaurantId, UserDto.convert(userEntity));
 	}
 	
-	public RestaurantDTO removeManager(String restaurantId, UserDto user) {
+	public RestaurantDto removeManager(String restaurantId, UserDto user) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restaurantId);
 		User userEntity = userRepo.findByUsername(user.getUsername());
 		if (userEntity == null || restaurant == null)
@@ -72,16 +65,16 @@ public class RestaurantAccountService {
 		userEntity = userRepo.save(userEntity);
 		
 		if (restaurant.getManager().remove(userEntity)) {
-			return restaurantMapper.convert(restaurantRepo.save(restaurant));
+			return RestaurantDto.convert(restaurantRepo.save(restaurant));
 		}
 		return null;
 	}
 	
-	public RestaurantDTO removeManager(String restaurantId, String userId) {
+	public RestaurantDto removeManager(String restaurantId, String userId) {
 		User userEntity = userRepo.findByUserId(userId);
 		if (userEntity == null)
 			return null;
-		return removeManager(restaurantId, userMapper.convert(userEntity));
+		return removeManager(restaurantId, UserDto.convert(userEntity));
 	}
 
 }

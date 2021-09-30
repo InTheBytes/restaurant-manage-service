@@ -5,7 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,12 +22,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inthebytes.restaurantmanager.dto.FoodDTO;
-import com.inthebytes.restaurantmanager.dto.LocationDTO;
-import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
-import com.inthebytes.restaurantmanager.dto.RoleDto;
-import com.inthebytes.restaurantmanager.dto.UserDto;
 import com.inthebytes.restaurantmanager.service.RestaurantAccountService;
+import com.inthebytes.stacklunch.data.food.FoodDto;
+import com.inthebytes.stacklunch.data.location.LocationDto;
+import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
+import com.inthebytes.stacklunch.data.role.RoleDto;
+import com.inthebytes.stacklunch.data.user.UserDto;
 
 @WebMvcTest(controllers = RestaurantAccountController.class)
 @AutoConfigureMockMvc
@@ -45,23 +46,40 @@ public class RestaurantAccountControllerTest {
 		UserDto user = new UserDto();
 		user.setUserId("1");
 		user.setUsername("TestUser");
-		user.setIsActive(true);
+		user.setActive(true);
 		RoleDto role = new RoleDto();
-		role.setRoleId("1");
+		role.setRoleId(1);
 		role.setName("test");
 		user.setRole(role);
 		manager = user;
 	}
 	
-	private RestaurantDTO makeRestaurant(Boolean addManager) {
-		LocationDTO location = new LocationDTO("Test", "Test", "Test", "Test", 11111);
-		RestaurantDTO restaurant = new RestaurantDTO("Test", "Test", location);
-		restaurant.setFoods(new ArrayList<FoodDTO>());
+	private LocationDto makeLocation() {
+		LocationDto location = new LocationDto();
+		location.setUnit("Test");
+		location.setStreet("Test");
+		location.setCity("Test");
+		location.setState("Test");
+		location.setZipCode(11111);
+		return location;
+	}
+	
+	private RestaurantDto makeRestaurant() {
+		RestaurantDto restaurant = new RestaurantDto();
+		restaurant.setName("Test");
+		restaurant.setCuisine("Test");
+		restaurant.setLocation(makeLocation());
+		return restaurant;
+	}
+	
+	private RestaurantDto makeRestaurant(Boolean addManager) {
+		RestaurantDto restaurant = makeRestaurant();
+		restaurant.setFoods(new ArrayList<FoodDto>());
 		restaurant.setRestaurantId((addManager) ? "1" : "2");
-		List<UserDto> managers = new ArrayList<UserDto>();
+		Set<UserDto> managers = new HashSet<UserDto>();
 		if (addManager)
 			managers.add(manager);
-		restaurant.setManagers(managers);
+		restaurant.setManager(managers);
 		return restaurant;
 		
 	}

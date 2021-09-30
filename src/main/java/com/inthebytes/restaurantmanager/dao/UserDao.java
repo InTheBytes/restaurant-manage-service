@@ -1,15 +1,14 @@
 package com.inthebytes.restaurantmanager.dao;
 
-import com.inthebytes.restaurantmanager.entity.User;
-
 import org.springframework.stereotype.Repository;
+
+import com.inthebytes.stacklunch.data.user.User;
+import com.inthebytes.stacklunch.data.user.UserRepository;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 @Repository
-public interface UserDao extends JpaRepository<User, String> {
+public interface UserDao extends UserRepository{
 	User findByEmailIgnoreCase(String email);
 	List<User> findAll();
 	User findByUsername(String username);

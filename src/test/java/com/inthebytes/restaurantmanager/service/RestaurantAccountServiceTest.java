@@ -3,7 +3,7 @@ package com.inthebytes.restaurantmanager.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,15 +19,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.inthebytes.restaurantmanager.dao.RestaurantDao;
 import com.inthebytes.restaurantmanager.dao.RoleDao;
 import com.inthebytes.restaurantmanager.dao.UserDao;
-import com.inthebytes.restaurantmanager.dto.LocationDTO;
-import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
-import com.inthebytes.restaurantmanager.dto.RoleDto;
-import com.inthebytes.restaurantmanager.dto.UserDto;
-import com.inthebytes.restaurantmanager.entity.Restaurant;
-import com.inthebytes.restaurantmanager.entity.Role;
-import com.inthebytes.restaurantmanager.entity.User;
-import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
-import com.inthebytes.restaurantmanager.mapper.UserMapper;
+import com.inthebytes.stacklunch.data.location.LocationDto;
+import com.inthebytes.stacklunch.data.restaurant.Restaurant;
+import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
+import com.inthebytes.stacklunch.data.role.Role;
+import com.inthebytes.stacklunch.data.role.RoleDto;
+import com.inthebytes.stacklunch.data.user.User;
+import com.inthebytes.stacklunch.data.user.UserDto;
 
 @RunWith(MockitoJUnitRunner.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -42,23 +40,17 @@ public class RestaurantAccountServiceTest {
 	@Mock
 	private UserDao userRepo;
 	
-	@Mock
-	private RestaurantMapper restaurantMapper;
-	
-	@Mock
-	private UserMapper userMapper;
-	
 	@InjectMocks
 	RestaurantAccountService service;
 	
 	private Restaurant restaurantEntity;
 	private User managerEntity;
-	private RestaurantDTO restaurantDto;
+	private RestaurantDto restaurantDto;
 	private UserDto userDto;
 
 	private Role getRole(Boolean isManager) {
 		Role role = new Role();
-		role.setRoleId((isManager) ? "1" : "2");
+		role.setRoleId((isManager) ? 1 : 2);
 		role.setName((isManager) ? "restaurant" : "user");
 		return role;
 	}
@@ -70,9 +62,9 @@ public class RestaurantAccountServiceTest {
 		userDto = new UserDto();
 		userDto.setUserId("1");
 		userDto.setUsername("Test");
-		userDto.setIsActive(false);
+		userDto.setActive(false);
 		RoleDto role = new RoleDto();
-		role.setRoleId("2");
+		role.setRoleId(2);
 		role.setName("user");
 		userDto.setRole(role);
 	}
@@ -81,10 +73,19 @@ public class RestaurantAccountServiceTest {
 		restaurantEntity = new Restaurant();
 		restaurantEntity.setRestaurantId("1");
 		restaurantEntity.setName("Test Restaurant");
-		restaurantEntity.setManager(new ArrayList<User>());
+		restaurantEntity.setManager(new HashSet<User>());
 		
-		LocationDTO location = new LocationDTO("", "", "", "", 11111);
-		restaurantDto = new RestaurantDTO("Test Restuarant", "Test", location);
+		LocationDto location = new LocationDto();
+		location.setUnit("");
+		location.setStreet("");
+		location.setCity("");
+		location.setState("");
+		location.setZipCode(11111);
+		
+		restaurantDto = new RestaurantDto();
+		restaurantDto.setName("Test Restaurant");
+		restaurantDto.setCuisine("Test");
+		restaurantDto.setLocation(location);
 		restaurantDto.setRestaurantId("1");
 	}
 	
@@ -106,7 +107,7 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		
 		assertThat(service.addManager("1", userDto)).isEqualTo(restaurantDto);
 	}
@@ -118,7 +119,7 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(null);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		
 		assertThat(service.addManager("1", userDto)).isNull();
 	}
@@ -130,9 +131,9 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		when(userRepo.findByUserId("1")).thenReturn(managerEntity);
-		when(userMapper.convert(managerEntity)).thenReturn(userDto);
+		when(UserDto.convert(managerEntity)).thenReturn(userDto);
 		
 		assertThat(service.addManager("1", userDto)).isNull();
 	}
@@ -144,9 +145,9 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		when(userRepo.findByUserId("1")).thenReturn(managerEntity);
-		when(userMapper.convert(managerEntity)).thenReturn(userDto);
+		when(UserDto.convert(managerEntity)).thenReturn(userDto);
 		
 		assertThat(service.addManager("1", "1")).isEqualTo(restaurantDto);
 	}
@@ -158,9 +159,9 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(null);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		when(userRepo.findByUserId("1")).thenReturn(managerEntity);
-		when(userMapper.convert(managerEntity)).thenReturn(userDto);
+		when(UserDto.convert(managerEntity)).thenReturn(userDto);
 		
 		assertThat(service.addManager("1", "1")).isNull();
 	}
@@ -172,9 +173,9 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		when(userRepo.findByUserId("1")).thenReturn(managerEntity);
-		when(userMapper.convert(managerEntity)).thenReturn(userDto);
+		when(UserDto.convert(managerEntity)).thenReturn(userDto);
 		
 		assertThat(service.addManager("1", "1")).isNull();
 	}
@@ -185,7 +186,7 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		
 		assertThat(service.removeManager("1", userDto)).isEqualTo(restaurantDto);
 	}
@@ -196,7 +197,7 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(null);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		
 		assertThat(service.removeManager("1", userDto)).isNull();
 	}
@@ -207,7 +208,7 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		
 		assertThat(service.removeManager("1", userDto)).isNull();
 	}
@@ -218,9 +219,9 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		when(userRepo.findByUserId("1")).thenReturn(managerEntity);
-		when(userMapper.convert(managerEntity)).thenReturn(userDto);
+		when(UserDto.convert(managerEntity)).thenReturn(userDto);
 		
 		assertThat(service.removeManager("1", userDto)).isEqualTo(restaurantDto);
 	}
@@ -231,9 +232,9 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(null);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		when(userRepo.findByUserId("1")).thenReturn(null);
-		when(userMapper.convert(managerEntity)).thenReturn(userDto);
+		when(UserDto.convert(managerEntity)).thenReturn(userDto);
 		
 		assertThat(service.removeManager("1", userDto)).isNull();
 	}
@@ -244,9 +245,9 @@ public class RestaurantAccountServiceTest {
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		when(userRepo.save(managerEntity)).thenReturn(managerEntity);
 		when(restaurantRepo.save(restaurantEntity)).thenReturn(restaurantEntity);
-		when(restaurantMapper.convert(restaurantEntity)).thenReturn(restaurantDto);
+		when(RestaurantDto.convert(restaurantEntity)).thenReturn(restaurantDto);
 		when(userRepo.findByUserId("1")).thenReturn(managerEntity);
-		when(userMapper.convert(managerEntity)).thenReturn(userDto);
+		when(UserDto.convert(managerEntity)).thenReturn(userDto);
 		
 		assertThat(service.removeManager("1", userDto)).isNull();
 	}

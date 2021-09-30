@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.inthebytes.restaurantmanager.dao.RestaurantDao;
-import com.inthebytes.restaurantmanager.dto.RestaurantDTO;
-import com.inthebytes.restaurantmanager.entity.Restaurant;
-import com.inthebytes.restaurantmanager.mapper.RestaurantMapper;
+import com.inthebytes.stacklunch.data.restaurant.Restaurant;
+import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
 
 @Service
 @Transactional
@@ -20,13 +19,10 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantDao restaurantRepo;
 
-	@Autowired
-	private RestaurantMapper mapper;
-
-	public RestaurantDTO createRestaurant(RestaurantDTO restaurant) {
+	public RestaurantDto createRestaurant(RestaurantDto restaurant) {
 		if (restaurantRepo.findByName(restaurant.getName()) != null)
 			throw new EntityExistsException();
-		return mapper.convert(restaurantRepo.save(mapper.convert(restaurant)));
+		return RestaurantDto.convert(restaurantRepo.save(restaurant.convert()));
 	}
 
 	public Boolean deleteRestaurant(String restaurantId) {
@@ -37,42 +33,42 @@ public class RestaurantService {
 		return true;
 	}
 	
-	public Page<RestaurantDTO> getRestaurantPages(Integer page, Integer pageSize) {
-		return restaurantRepo.findAll(PageRequest.of(page, pageSize)).map((x) -> mapper.convert(x));
+	public Page<RestaurantDto> getRestaurantPages(Integer page, Integer pageSize) {
+		return restaurantRepo.findAll(PageRequest.of(page, pageSize)).map((x) -> RestaurantDto.convert(x));
 	}
 	
 
-	public RestaurantDTO getRestaurantByName(String name) {
+	public RestaurantDto getRestaurantByName(String name) {
 		Restaurant restaurant = restaurantRepo.findByName(name);
 		if (restaurant == null)
 			return null;
 		else
-			return mapper.convert(restaurant);
+			return RestaurantDto.convert(restaurant);
 	}
 	
-	public RestaurantDTO getRestaurantByManagerID(String id) {
+	public RestaurantDto getRestaurantByManagerID(String id) {
 		Restaurant restaurant = restaurantRepo.findByManagerUserId(id);
 		if (restaurant == null)
 			return null;
 		else
-			return mapper.convert(restaurant);
+			return RestaurantDto.convert(restaurant);
 	}
 	
-	public RestaurantDTO getRestaurant(String restuarantId) {
+	public RestaurantDto getRestaurant(String restuarantId) {
 		Restaurant restaurant = restaurantRepo.findByRestaurantId(restuarantId);
 		if (restaurant == null)
 			return null;
 		else
-			return mapper.convert(restaurant);
+			return RestaurantDto.convert(restaurant);
 	}
 	
-	public RestaurantDTO updateRestaurant(RestaurantDTO restaurant) {
+	public RestaurantDto updateRestaurant(RestaurantDto restaurant) {
 		Restaurant restaurantEntity = restaurantRepo.findByRestaurantId(restaurant.getRestaurantId());
 		if (restaurantEntity == null)
 			return null;
 		else {
-			restaurantEntity = mapper.convert(restaurant);
-			return mapper.convert(restaurantRepo.save(restaurantEntity));
+			restaurantEntity = restaurant.convert();
+			return RestaurantDto.convert(restaurantRepo.save(restaurantEntity));
 		}
 	}
 }
