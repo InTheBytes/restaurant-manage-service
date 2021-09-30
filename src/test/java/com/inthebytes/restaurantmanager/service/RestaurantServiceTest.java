@@ -13,10 +13,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.inthebytes.restaurantmanager.dao.RestaurantDao;
@@ -25,38 +24,33 @@ import com.inthebytes.stacklunch.data.location.LocationDto;
 import com.inthebytes.stacklunch.data.restaurant.Restaurant;
 import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
 
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RestaurantServiceTest {
 
 	@Mock
 	RestaurantDao repo;
 
+	@Autowired
 	@InjectMocks
 	RestaurantService service;
 	
 	@Test
 	public void getRestaurantPagesTest() {
-		MockitoAnnotations.initMocks(this);
 		Restaurant ent1 = makeRestaurantEntity();
 		Restaurant ent2 = makeRestaurantEntity();
-		RestaurantDto dto1 = makeRestaurantDto();
-		RestaurantDto dto2 = makeRestaurantDto();
 		List<Restaurant> restaurants = new ArrayList<Restaurant>();
 		ent2.setName("SecondTest");
-		dto2.setName("SecondTest");
-		dto2.setRestaurantId("33");
 		
 		restaurants.add(ent1);
 		restaurants.add(ent2);
 		Page<Restaurant> page = new PageImpl<Restaurant>(restaurants);
 		when(repo.findAll(PageRequest.of(0, 2))).thenReturn(page);
-		when(RestaurantDto.convert(ent1)).thenReturn(dto1);
-		when(RestaurantDto.convert(ent2)).thenReturn(dto2);
 		
 		Page<RestaurantDto> resultPages = service.getRestaurantPages(0, 2);
 		assertThat(resultPages).hasSize(2);
@@ -64,19 +58,16 @@ public class RestaurantServiceTest {
 	
 	@Test
 	public void getRestaurantWithIdTest() {
-		MockitoAnnotations.initMocks(this);
 		Restaurant entity = makeRestaurantEntity();
 		RestaurantDto dto = makeRestaurantDto();
 		
 		when(repo.findByRestaurantId("22")).thenReturn(entity);
-		when(RestaurantDto.convert(entity)).thenReturn(dto);
 		RestaurantDto result = service.getRestaurant("22");
 		assertThat(result).isEqualTo(dto);
 	}
 	
 	@Test
 	public void getRestaurantWithIdNotFoundTest() {
-		MockitoAnnotations.initMocks(this);
 		when(repo.findByRestaurantId("22")).thenReturn(null);
 		
 		RestaurantDto result = service.getRestaurant("22");
@@ -85,21 +76,18 @@ public class RestaurantServiceTest {
 	
 	@Test
 	public void getRestaurantWithNameTest() {
-		MockitoAnnotations.initMocks(this);
 		Restaurant entity = makeRestaurantEntity();
 		RestaurantDto dto = makeRestaurantDto();
 		dto.setName("test");
 		entity.setName("test");
 		
 		when(repo.findByName("test")).thenReturn(entity);
-		when(RestaurantDto.convert(entity)).thenReturn(dto);
 		RestaurantDto result = service.getRestaurantByName("test");
 		assertThat(result).isEqualTo(dto);
 	}
 	
 	@Test
 	public void getRestaurantWithNameNotFoundTest() {
-		MockitoAnnotations.initMocks(this);
 		when(repo.findByName("test")).thenReturn(null);
 		
 		RestaurantDto result = service.getRestaurantByName("test");
@@ -108,15 +96,12 @@ public class RestaurantServiceTest {
 	
 	@Test
 	public void updateRestaurantTest() {
-		MockitoAnnotations.initMocks(this);
 		RestaurantDto submission = makeRestaurantDto();
 		Restaurant entity = makeRestaurantEntity();
 		submission.setRestaurantId("22");
 		
 		when(repo.findByRestaurantId("22")).thenReturn(entity);
 		when(repo.save(entity)).thenReturn(entity);
-		when(submission.convert()).thenReturn(entity);
-		when(RestaurantDto.convert(entity)).thenReturn(submission);
 		
 		RestaurantDto result = service.updateRestaurant(submission);
 		assertThat(result).isEqualTo(submission);
@@ -124,7 +109,6 @@ public class RestaurantServiceTest {
 	
 	@Test
 	public void updateRestaurantNotFoundTest() {
-		MockitoAnnotations.initMocks(this);
 		RestaurantDto submission = makeRestaurantDto();
 		submission.setRestaurantId("22");
 		when(repo.findByRestaurantId("22")).thenReturn(null);
@@ -141,11 +125,7 @@ public class RestaurantServiceTest {
 		Restaurant result = entity;
 		result.setRestaurantId("22");
 		returnedDto.setRestaurantId("22");
-		
-		MockitoAnnotations.initMocks(this);
 
-		when(dto.convert()).thenReturn(entity);
-		when(RestaurantDto.convert(result)).thenReturn(dto);
 		when(repo.findByName(dto.getName())).thenReturn(null);
 		when(repo.save(entity)).thenReturn(result);
 
@@ -158,8 +138,6 @@ public class RestaurantServiceTest {
 	public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
 		RestaurantDto dto = makeRestaurantDto();
 		Restaurant entity = makeRestaurantEntity();
-		
-		MockitoAnnotations.initMocks(this);
 
 		when(repo.findByName(dto.getName())).thenReturn(entity);
 
@@ -167,7 +145,6 @@ public class RestaurantServiceTest {
 	}
 
 	public void deleteRestaurantTest() {
-		MockitoAnnotations.initMocks(this);
 
 		when(repo.findByRestaurantId("22")).thenReturn(new Restaurant());
 
@@ -176,7 +153,6 @@ public class RestaurantServiceTest {
 
 	@Test
 	public void deleteNonexistentRestaurantTest() {
-		MockitoAnnotations.initMocks(this);
 
 		when(repo.findByRestaurantId("22")).thenReturn(null);
 
@@ -195,6 +171,7 @@ public class RestaurantServiceTest {
 		test.setName("Lexi's Burgers");
 		test.setCuisine("Fast Food");
 		test.setLocation(location);
+		test.setRestaurantId("22");
 		return test;
 	}
 	
@@ -207,11 +184,12 @@ public class RestaurantServiceTest {
 		location.setUnit("123");
 		location.setCity("Sacramento");
 		location.setState("California");
-		location.setZipCode(95838);
+		location.setZipCode(11111);
 		test.setLocation(location);
 
 		test.setCuisine("Fast Food");
 
+		test.setRestaurantId("22");
 		return test;
 	}
 }

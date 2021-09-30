@@ -17,8 +17,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,13 +29,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.inthebytes.restaurantmanager.RestaurantManagerTestConfig;
 import com.inthebytes.restaurantmanager.service.RestaurantService;
 import com.inthebytes.stacklunch.data.location.LocationDto;
 import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
 
-@WebMvcTest(RestaurantController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
+		classes = {RestaurantManagerTestConfig.class, RestaurantController.class})
 @AutoConfigureMockMvc
+@EnableAutoConfiguration
 public class RestaurantControllerTest {
 
 	@MockBean
