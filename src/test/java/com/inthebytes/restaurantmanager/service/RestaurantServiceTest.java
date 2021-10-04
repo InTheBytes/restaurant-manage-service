@@ -94,18 +94,18 @@ public class RestaurantServiceTest {
 		assertThat(result).isNull();
 	}
 	
-	@Test
-	public void updateRestaurantTest() {
-		RestaurantDto submission = makeRestaurantDto();
-		Restaurant entity = makeRestaurantEntity();
-		submission.setRestaurantId("22");
-		
-		when(repo.findByRestaurantId("22")).thenReturn(entity);
-		when(repo.save(entity)).thenReturn(entity);
-		
-		RestaurantDto result = service.updateRestaurant(submission);
-		assertThat(result).isEqualTo(submission);
-	}
+//	@Test
+//	public void updateRestaurantTest() {
+//		RestaurantDto submission = makeRestaurantDto();
+//		Restaurant entity = makeRestaurantEntity();
+//		submission.setRestaurantId("22");
+//		
+//		when(repo.findByRestaurantId("22")).thenReturn(entity);
+//		when(repo.save(entity)).thenReturn(entity);
+//		
+//		RestaurantDto result = service.updateRestaurant(submission);
+//		assertThat(result).isEqualTo(submission);
+//	}
 	
 	@Test
 	public void updateRestaurantNotFoundTest() {

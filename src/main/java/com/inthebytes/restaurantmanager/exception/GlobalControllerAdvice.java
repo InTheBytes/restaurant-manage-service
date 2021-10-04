@@ -1,5 +1,7 @@
 package com.inthebytes.restaurantmanager.exception;
 
+import java.sql.SQLException;
+
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +24,18 @@ public class GlobalControllerAdvice {
 	public ResponseEntity<String> handleBadParams(MissingServletRequestParameterException ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler({SQLException.class})
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public ResponseEntity<String> handleSqlException(SQLException ex) {
+		ex.printStackTrace();
+		return new ResponseEntity<>("SQL Exception", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 	@ExceptionHandler({Exception.class})
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ResponseEntity<String> handleOtherException(Exception ex) {
+		ex.printStackTrace();
 		return new ResponseEntity<>("Something went wrong.", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

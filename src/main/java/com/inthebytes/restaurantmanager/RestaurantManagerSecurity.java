@@ -12,7 +12,9 @@ public class RestaurantManagerSecurity extends StackLunchSecurityConfig {
 
 	@Override
 	public HttpSecurity addSecurityConfigs(HttpSecurity security) throws Exception {
-		return security.authorizeRequests().antMatchers("/**").permitAll().and();
+		return security.authorizeRequests()
+				.antMatchers("/**").permitAll()
+				.and();
 	}
 
 }
