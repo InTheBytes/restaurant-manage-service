@@ -31,7 +31,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
-public class RestaurantServiceTest {
+class RestaurantServiceTest {
 
 	@Mock
 	RestaurantDao repo;
@@ -41,7 +41,7 @@ public class RestaurantServiceTest {
 	RestaurantService service;
 	
 	@Test
-	public void getRestaurantPagesTest() {
+	void getRestaurantPagesTest() {
 		Restaurant ent1 = makeRestaurantEntity();
 		Restaurant ent2 = makeRestaurantEntity();
 		List<Restaurant> restaurants = new ArrayList<Restaurant>();
@@ -57,7 +57,7 @@ public class RestaurantServiceTest {
 	}
 	
 	@Test
-	public void getRestaurantWithIdTest() {
+	void getRestaurantWithIdTest() {
 		Restaurant entity = makeRestaurantEntity();
 		RestaurantDto dto = makeRestaurantDto();
 		
@@ -67,7 +67,7 @@ public class RestaurantServiceTest {
 	}
 	
 	@Test
-	public void getRestaurantWithIdNotFoundTest() {
+	void getRestaurantWithIdNotFoundTest() {
 		when(repo.findByRestaurantId("22")).thenReturn(null);
 		
 		RestaurantDto result = service.getRestaurant("22");
@@ -75,7 +75,7 @@ public class RestaurantServiceTest {
 	}
 	
 	@Test
-	public void getRestaurantWithNameTest() {
+	void getRestaurantWithNameTest() {
 		Restaurant entity = makeRestaurantEntity();
 		RestaurantDto dto = makeRestaurantDto();
 		dto.setName("test");
@@ -87,7 +87,7 @@ public class RestaurantServiceTest {
 	}
 	
 	@Test
-	public void getRestaurantWithNameNotFoundTest() {
+	void getRestaurantWithNameNotFoundTest() {
 		when(repo.findByName("test")).thenReturn(null);
 		
 		RestaurantDto result = service.getRestaurantByName("test");
@@ -95,7 +95,7 @@ public class RestaurantServiceTest {
 	}
 	
 //	@Test
-//	public void updateRestaurantTest() {
+//	void updateRestaurantTest() {
 //		RestaurantDto submission = makeRestaurantDto();
 //		Restaurant entity = makeRestaurantEntity();
 //		submission.setRestaurantId("22");
@@ -108,7 +108,7 @@ public class RestaurantServiceTest {
 //	}
 	
 	@Test
-	public void updateRestaurantNotFoundTest() {
+	void updateRestaurantNotFoundTest() {
 		RestaurantDto submission = makeRestaurantDto();
 		submission.setRestaurantId("22");
 		when(repo.findByRestaurantId("22")).thenReturn(null);
@@ -118,7 +118,7 @@ public class RestaurantServiceTest {
 	}
 
 	@Test
-	public void createRestaurantTest() throws JsonProcessingException, Exception {
+	void createRestaurantTest() throws JsonProcessingException, Exception {
 		RestaurantDto dto = makeRestaurantDto();
 		RestaurantDto returnedDto = dto;
 		Restaurant entity = makeRestaurantEntity();
@@ -135,7 +135,7 @@ public class RestaurantServiceTest {
 	}
 
 	@Test
-	public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
+	void createExistingRestaurantTest() throws JsonProcessingException, Exception {
 		RestaurantDto dto = makeRestaurantDto();
 		Restaurant entity = makeRestaurantEntity();
 
@@ -144,7 +144,7 @@ public class RestaurantServiceTest {
 		assertThatThrownBy(() -> service.createRestaurant(dto)).isInstanceOf(EntityExistsException.class);
 	}
 
-	public void deleteRestaurantTest() {
+	void deleteRestaurantTest() {
 
 		when(repo.findByRestaurantId("22")).thenReturn(new Restaurant());
 
@@ -152,7 +152,7 @@ public class RestaurantServiceTest {
 	}
 
 	@Test
-	public void deleteNonexistentRestaurantTest() {
+	void deleteNonexistentRestaurantTest() {
 
 		when(repo.findByRestaurantId("22")).thenReturn(null);
 

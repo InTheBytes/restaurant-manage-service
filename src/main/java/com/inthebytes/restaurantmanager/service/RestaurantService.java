@@ -37,7 +37,7 @@ public class RestaurantService {
 	}
 	
 	public Page<RestaurantDto> getRestaurantPages(Integer page, Integer pageSize) {
-		return restaurantRepo.findAll(PageRequest.of(page, pageSize)).map((x) -> RestaurantDto.convert(x));
+		return RestaurantDto.convert(restaurantRepo.findAll(PageRequest.of(page, pageSize)));
 	}
 	
 	private RestaurantDto sortRestaurantDto(Restaurant restaurant) {
@@ -45,11 +45,9 @@ public class RestaurantService {
 		RestaurantDto dto = RestaurantDto.convert(restaurant);
 		if (dto.getFoods() == null) return dto;
 		
-		dto.getFoods().sort(new Comparator<FoodDto>() {
-			public int compare(FoodDto food1, FoodDto food2) {
-				return food1.getName().compareTo(food2.getName());
-			}
-		});
+		dto.getFoods().sort(
+				(food1, food2) -> food1.getName().compareTo(food2.getName())
+				);
 		
 		return dto;
 	}

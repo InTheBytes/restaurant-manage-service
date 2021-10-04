@@ -28,7 +28,7 @@ import com.inthebytes.stacklunch.data.user.UserDto;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class RestaurantAccountServiceTest {
+class RestaurantAccountServiceTest {
 
 	@Mock
 	private RestaurantDao restaurantRepo;
@@ -87,13 +87,13 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@BeforeAll
-	public void setUp() {
+	void setUp() {
 		initializeUsers();
 		initializeRestaurants();
 	}
 	
 	@Test
-	public void addManagerWithDtoTest() {
+	void addManagerWithDtoTest() {
 		when(roleRepo.findByName("restaurant")).thenReturn(getRole(true));
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(restaurantEntity);
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
@@ -111,7 +111,7 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@Test
-	public void addManagerDtoNoUserTest() {
+	void addManagerDtoNoUserTest() {
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(restaurantEntity);
 		when(userRepo.findByUsername("Test")).thenReturn(null);
 		
@@ -119,7 +119,7 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@Test
-	public void addManagerDtoNoRestaurantTest() {
+	void addManagerDtoNoRestaurantTest() {
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(null);
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		
@@ -127,7 +127,7 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@Test
-	public void addManagerWithIdTest() {
+	void addManagerWithIdTest() {
 		when(userRepo.findByUserId("1")).thenReturn(managerEntity);
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(restaurantEntity);
 		when(userRepo.findByUsername(managerEntity.getUsername())).thenReturn(managerEntity);
@@ -139,7 +139,7 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@Test
-	public void addManagerIdNoUserTest() {
+	void addManagerIdNoUserTest() {
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(restaurantEntity);
 		when(userRepo.findByUserId("1")).thenReturn(managerEntity);
 		
@@ -147,7 +147,7 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@Test
-	public void addManagerIdNoRestaurantTest() {
+	void addManagerIdNoRestaurantTest() {
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(null);
 		when(userRepo.findByUserId("1")).thenReturn(managerEntity);
 		
@@ -155,7 +155,7 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@Test
-	public void removeManagerDtoNoUserTest() {
+	void removeManagerDtoNoUserTest() {
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(restaurantEntity);
 		when(userRepo.findByUsername("Test")).thenReturn(null);
 		
@@ -163,7 +163,7 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@Test
-	public void removeManagerDtoNoRestaurantTest() {
+	void removeManagerDtoNoRestaurantTest() {
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(null);
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		
@@ -171,7 +171,7 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@Test
-	public void removeManagerIdNoUserTest() {
+	void removeManagerIdNoUserTest() {
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(restaurantEntity);
 		when(userRepo.findByUsername("Test")).thenReturn(null);
 		
@@ -179,7 +179,7 @@ public class RestaurantAccountServiceTest {
 	}
 	
 	@Test
-	public void removeManagerIdNoRestaurantTest() {
+	void removeManagerIdNoRestaurantTest() {
 		when(restaurantRepo.findByRestaurantId("1")).thenReturn(null);
 		when(userRepo.findByUsername("Test")).thenReturn(managerEntity);
 		

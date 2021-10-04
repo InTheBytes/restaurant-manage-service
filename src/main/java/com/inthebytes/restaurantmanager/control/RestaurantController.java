@@ -52,7 +52,7 @@ public class RestaurantController {
 			@RequestParam(value = "page-size", required = false, defaultValue = "10") Integer pageSize
 			) {
 		Page<RestaurantDto> restaurants = service.getRestaurantPages(page, pageSize);
-		if (restaurants == null || restaurants.getContent().size() == 0)
+		if (restaurants == null || restaurants.isEmpty())
 			return ResponseEntity.noContent().build();
 		else {
 			return ResponseEntity.ok().body(restaurants);
@@ -144,8 +144,9 @@ public class RestaurantController {
 			@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content)
 	})
 	@DeleteMapping(value = "/{restaurantId}")
-	public ResponseEntity<?> deleteRestaurant(@PathVariable("restaurantId") String restaurantId) {
-		if (service.deleteRestaurant(restaurantId)) {
+	public ResponseEntity<String> deleteRestaurant(@PathVariable("restaurantId") String restaurantId) {
+		Boolean restaurantDeleted = service.deleteRestaurant(restaurantId);
+		if (restaurantDeleted) {
 			return ResponseEntity.ok().build();
 		}
 		else {

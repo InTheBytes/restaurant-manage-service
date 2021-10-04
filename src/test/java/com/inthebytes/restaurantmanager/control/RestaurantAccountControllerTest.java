@@ -32,7 +32,7 @@ import com.inthebytes.stacklunch.data.user.UserDto;
 	classes = {RestaurantManagerTestConfig.class, RestaurantAccountController.class})
 @AutoConfigureMockMvc
 @EnableAutoConfiguration
-public class RestaurantAccountControllerTest {
+class RestaurantAccountControllerTest {
 	
 	@MockBean
 	RestaurantAccountService service;
@@ -83,7 +83,7 @@ public class RestaurantAccountControllerTest {
 	}
 	
 	@Test
-	public void addManagerTest() throws Exception {
+	void addManagerTest() throws Exception {
 		Mockito.when(service.addManager("1", makeUser())).thenReturn(makeRestaurant(true));
 		
 		mock.perform(put("/restaurant/1/manager")
@@ -95,7 +95,7 @@ public class RestaurantAccountControllerTest {
 	}
 	
 	@Test
-	public void addManagerNotFoundTest() throws Exception {
+	void addManagerNotFoundTest() throws Exception {
 		mock.perform(put("/restaurant/2/manager")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(makeUser())))
@@ -104,7 +104,7 @@ public class RestaurantAccountControllerTest {
 	
 	
 	@Test
-	public void addManagerByIdTest() throws Exception {
+	void addManagerByIdTest() throws Exception {
 		Mockito.when(service.addManager("1", "1")).thenReturn(makeRestaurant(true));
 		
 		mock.perform(put("/restaurant/1/manager/1")
@@ -116,7 +116,7 @@ public class RestaurantAccountControllerTest {
 	}
 	
 	@Test
-	public void addManagerByIdNotFoundTest() throws Exception {
+	void addManagerByIdNotFoundTest() throws Exception {
 		mock.perform(put("/restaurant/2/manager/1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -124,7 +124,7 @@ public class RestaurantAccountControllerTest {
 	
 	
 	@Test
-	public void deleteManagerTest() throws Exception {
+	void deleteManagerTest() throws Exception {
 		Mockito.when(service.removeManager("2", makeUser())).thenReturn(makeRestaurant(false));
 		
 		mock.perform(delete("/restaurant/2/manager")
@@ -136,7 +136,7 @@ public class RestaurantAccountControllerTest {
 	}
 	
 	@Test
-	public void deleteManagerNotFoundTest() throws Exception {
+	void deleteManagerNotFoundTest() throws Exception {
 		mock.perform(delete("/restaurant/2/manager")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(makeUser())))
@@ -145,7 +145,7 @@ public class RestaurantAccountControllerTest {
 	
 	
 	@Test
-	public void deleteManagerByIdTest() throws Exception {
+	void deleteManagerByIdTest() throws Exception {
 		Mockito.when(service.removeManager("2", "1")).thenReturn(makeRestaurant(false));
 		
 		mock.perform(delete("/restaurant/2/manager/1")
@@ -156,7 +156,7 @@ public class RestaurantAccountControllerTest {
 	}
 	
 	@Test
-	public void deleteManagerByIdNotFoundTest() throws Exception {
+	void deleteManagerByIdNotFoundTest() throws Exception {
 		mock.perform(delete("/restaurant/2/manager/1")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isNotFound());

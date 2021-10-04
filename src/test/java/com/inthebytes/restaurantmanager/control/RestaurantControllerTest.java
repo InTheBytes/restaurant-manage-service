@@ -38,7 +38,7 @@ import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
 		classes = {RestaurantManagerTestConfig.class, RestaurantController.class})
 @AutoConfigureMockMvc
 @EnableAutoConfiguration
-public class RestaurantControllerTest {
+class RestaurantControllerTest {
 
 	@MockBean
 	RestaurantService service;
@@ -47,7 +47,7 @@ public class RestaurantControllerTest {
 	MockMvc mock;
 	
 	@Test
-	public void getRestaurantsTest() throws Exception {
+	void getRestaurantsTest() throws Exception {
 		RestaurantDto rest1 = makeRestaurantModel();
 		RestaurantDto rest2 = makeRestaurantModel();
 		rest2.setName("A different one");
@@ -67,7 +67,7 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void getRestaurantsEmptyTest() throws Exception {
+	void getRestaurantsEmptyTest() throws Exception {
 
 		Page<RestaurantDto> page = Page.empty();
 		when(service.getRestaurantPages(1, 1)).thenReturn(page);
@@ -78,7 +78,7 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void getRestaurantsNullTest() throws Exception {
+	void getRestaurantsNullTest() throws Exception {
 		when(service.getRestaurantPages(1, 1)).thenReturn(null);
 		
 		mock.perform(get("/restaurant?page-size=1&page=1")
@@ -87,7 +87,7 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void getRestaurantByNameTest() throws Exception {
+	void getRestaurantByNameTest() throws Exception {
 		RestaurantDto result = makeRestaurantModel();
 		result.setName("test");
 		when(service.getRestaurantByName("test")).thenReturn(result);
@@ -99,7 +99,7 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void getRestaurantByNameNotFoundTest() throws Exception {
+	void getRestaurantByNameNotFoundTest() throws Exception {
 		when(service.getRestaurantByName("test")).thenReturn(null);
 		
 		mock.perform(get("/restaurant/name/test")
@@ -108,7 +108,7 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void getRestaurantTest() throws Exception {
+	void getRestaurantTest() throws Exception {
 		RestaurantDto result = makeRestaurantModel();
 		result.setRestaurantId("22");
 		when(service.getRestaurant("22")).thenReturn(result);
@@ -120,7 +120,7 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void getRestaurantNotFoundTest() throws Exception {
+	void getRestaurantNotFoundTest() throws Exception {
 		when(service.getRestaurant("22")).thenReturn(null);
 		
 		mock.perform(get("/restaurant/22")
@@ -129,7 +129,7 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void updateRestaurantTest() throws Exception {
+	void updateRestaurantTest() throws Exception {
 		RestaurantDto submission = makeRestaurantModel();
 		RestaurantDto result = makeRestaurantModel();
 		RestaurantDto transit = makeRestaurantModel();
@@ -146,7 +146,7 @@ public class RestaurantControllerTest {
 	}
 	
 	@Test
-	public void updateRestaurantNotFoundTest() throws JsonProcessingException, Exception {
+	void updateRestaurantNotFoundTest() throws JsonProcessingException, Exception {
 		RestaurantDto submission = makeRestaurantModel();
 		when(service.updateRestaurant(submission)).thenReturn(null);
 		
@@ -157,7 +157,7 @@ public class RestaurantControllerTest {
 	}
 
 	@Test
-	public void createRestaurantTest() throws JsonProcessingException, Exception {
+	void createRestaurantTest() throws JsonProcessingException, Exception {
 		RestaurantDto restaurant = makeRestaurantModel();
 		RestaurantDto result = makeRestaurantModel();
 		result.setRestaurantId("22");
@@ -172,7 +172,7 @@ public class RestaurantControllerTest {
 	}
 
 	@Test
-	public void createExistingRestaurantTest() throws JsonProcessingException, Exception {
+	void createExistingRestaurantTest() throws JsonProcessingException, Exception {
 		RestaurantDto restaurant = makeRestaurantModel();
 		
 		when(service.createRestaurant(restaurant)).thenThrow(new EntityExistsException());
@@ -184,7 +184,7 @@ public class RestaurantControllerTest {
 	}
 
 	@Test
-	public void deleteRestaurantTest() throws Exception{
+	void deleteRestaurantTest() throws Exception{
 		when(service.deleteRestaurant("22")).thenReturn(true);
 		
 		mock.perform(delete("/restaurant/22"))
@@ -192,7 +192,7 @@ public class RestaurantControllerTest {
 	}
 
 	@Test
-	public void deleteNonexistentRestaurantTest() throws Exception {
+	void deleteNonexistentRestaurantTest() throws Exception {
 		when(service.deleteRestaurant("22")).thenReturn(false);
 		
 		mock.perform(delete("/restaurant/22"))
