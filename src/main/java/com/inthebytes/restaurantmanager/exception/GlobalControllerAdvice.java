@@ -28,14 +28,12 @@ public class GlobalControllerAdvice {
 	@ExceptionHandler({SQLException.class})
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ResponseEntity<String> handleSqlException(SQLException ex) {
-		ex.printStackTrace();
 		return new ResponseEntity<>("SQL Exception", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler({Exception.class})
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ResponseEntity<String> handleOtherException(Exception ex) {
-		ex.printStackTrace();
 		return new ResponseEntity<>("Something went wrong.", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
