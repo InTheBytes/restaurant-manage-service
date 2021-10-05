@@ -146,7 +146,7 @@ public class RestaurantController {
 	@DeleteMapping(value = "/{restaurantId}")
 	public ResponseEntity<String> deleteRestaurant(@PathVariable("restaurantId") String restaurantId) {
 		Boolean restaurantDeleted = service.deleteRestaurant(restaurantId);
-		if (restaurantDeleted) {
+		if (Boolean.TRUE.equals(restaurantDeleted)) {
 			return ResponseEntity.ok().build();
 		}
 		else {
