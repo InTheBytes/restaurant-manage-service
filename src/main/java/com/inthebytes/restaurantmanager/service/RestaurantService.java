@@ -1,7 +1,5 @@
 package com.inthebytes.restaurantmanager.service;
 
-import java.util.Comparator;
-
 import javax.persistence.EntityExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.inthebytes.restaurantmanager.dao.RestaurantDao;
-import com.inthebytes.stacklunch.data.food.FoodDto;
 import com.inthebytes.stacklunch.data.restaurant.Restaurant;
 import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
 
