@@ -6,7 +6,7 @@ pipeline {
         dockerTool 'Docker'
     }
     stages {
-        stage('Clean and Test target') {
+        stage('Test and Verify target') {
             steps {
                 sh 'mvn verify'
             }
@@ -23,7 +23,7 @@ pipeline {
                 waitForQualityGate abortPipeline: true
             }
         }
-        stage('Test and Package') {
+        stage('Clean and Package') {
             steps {
                 sh 'mvn clean package'
             }

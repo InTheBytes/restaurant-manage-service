@@ -4,7 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,7 +71,7 @@ class RestaurantAccountControllerTest {
 	
 	private RestaurantDto makeRestaurant(Boolean addManager) {
 		RestaurantDto restaurant = makeRestaurant();
-		restaurant.setFoods(new ArrayList<FoodDto>());
+		restaurant.setFoods(new HashSet<FoodDto>());
 		restaurant.setRestaurantId((addManager) ? "1" : "2");
 		Set<UserDto> managers = new HashSet<UserDto>();
 		if (addManager)

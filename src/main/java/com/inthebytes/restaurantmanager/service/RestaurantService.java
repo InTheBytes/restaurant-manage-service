@@ -1,5 +1,8 @@
 package com.inthebytes.restaurantmanager.service;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import javax.persistence.EntityExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.inthebytes.restaurantmanager.dao.RestaurantDao;
+import com.inthebytes.stacklunch.data.food.FoodDto;
 import com.inthebytes.stacklunch.data.restaurant.Restaurant;
 import com.inthebytes.stacklunch.data.restaurant.RestaurantDto;
 
@@ -42,10 +46,9 @@ public class RestaurantService {
 		RestaurantDto dto = RestaurantDto.convert(restaurant);
 		if (dto.getFoods() == null) return dto;
 		
-		dto.getFoods().sort(
-				(food1, food2) -> food1.getName().compareTo(food2.getName())
-				);
-		
+		Set<FoodDto> sortedFoods = new TreeSet<>((food1, food2) -> food1.getName().compareTo(food2.getName()));
+		sortedFoods.addAll(dto.getFoods());
+		dto.setFoods(sortedFoods);
 		return dto;
 	}
 	
